@@ -1,0 +1,204 @@
+Drew Faber
+Homework week 2
+
+--1.	Execute the following lines in order to create new rows in the database.  The first two lines ‘may’ create 
+--	an error message which is okay, they are just to ensure that there is no existing records that match the two that you are inserting.
+
+DELETE FROM EMP WHERE EMPNO = 9999;
+DELETE FROM DEPT WHERE DEPTNO = 60;
+INSERT INTO EMP VALUES (9999, 'KIRK',  'CAPTAIN', NULL,'14-APR-2002', 6000, NULL, 50);        
+INSERT INTO DEPT VALUES (60, 'STARFLEET', 'SAN FRANCISCO');
+
+
+--2.	Show a list of different jobs.  Eliminate repeating values.
+
+SELECT DISTINCT JOB
+FROM dbo.EMP 
+
+JOB
+---------
+ANALYST
+CAPTAIN
+CLERK
+MANAGER
+PRESIDENT
+SALESMAN
+
+(6 row(s) affected)
+
+
+--3.	List all employee records where the comm field is NULL.
+
+SELECT *
+FROM dbo.EMP
+WHERE COMM IS NULL
+
+EMPNO       ENAME      JOB       MGR         HIREDATE   SAL                                     COMM                                    DEPTNO
+----------- ---------- --------- ----------- ---------- --------------------------------------- --------------------------------------- -----------
+7369        SMITH      CLERK     7902        1980-12-17 800.00                                  NULL                                    20
+7566        JONES      MANAGER   7839        1981-04-02 2975.00                                 NULL                                    20
+7698        BLAKE      MANAGER   7839        1981-05-01 2850.00                                 NULL                                    30
+7782        CLARK      MANAGER   7839        1981-06-09 2450.00                                 NULL                                    10
+7788        SCOTT      ANALYST   7566        1982-12-09 3000.00                                 NULL                                    20
+7839        KING       PRESIDENT NULL        1981-11-17 5000.00                                 NULL                                    10
+7876        ADAMS      CLERK     7788        1983-01-12 1100.00                                 NULL                                    20
+7900        JAMES      CLERK     7698        1981-12-03 950.00                                  NULL                                    30
+7902        FORD       ANALYST   7566        1981-12-03 3000.00                                 NULL                                    20
+7934        MILLER     CLERK     7782        1982-01-23 1300.00                                 NULL                                    10
+9999        KIRK       CAPTAIN   NULL        2002-04-14 6000.00                                 NULL                                    50
+
+(11 row(s) affected)
+
+
+--4.	Produce a list of employees, show their sal and comm (make them all 15% of salary)  and a total compensation for them
+
+SELECT ENAME, SAL, SAL*.15 as COMM, SAL*1.15 as TOTAL
+FROM dbo.EMP
+
+ENAME      SAL                                     COMM                                    TOTAL
+---------- --------------------------------------- --------------------------------------- ---------------------------------------
+SMITH      800.00                                  120.0000                                920.0000
+ALLEN      1600.00                                 240.0000                                1840.0000
+WARD       1250.00                                 187.5000                                1437.5000
+JONES      2975.00                                 446.2500                                3421.2500
+MARTIN     1250.00                                 187.5000                                1437.5000
+BLAKE      2850.00                                 427.5000                                3277.5000
+CLARK      2450.00                                 367.5000                                2817.5000
+SCOTT      3000.00                                 450.0000                                3450.0000
+KING       5000.00                                 750.0000                                5750.0000
+TURNER     1500.00                                 225.0000                                1725.0000
+ADAMS      1100.00                                 165.0000                                1265.0000
+JAMES      950.00                                  142.5000                                1092.5000
+FORD       3000.00                                 450.0000                                3450.0000
+MILLER     1300.00                                 195.0000                                1495.0000
+KIRK       6000.00                                 900.0000                                6900.0000
+
+(15 row(s) affected)
+
+
+--5.	List all the employees names in reverse alphabetical order
+
+SELECT ENAME
+FROM dbo.EMP
+ORDER BY ENAME DESC;
+
+ENAME
+----------
+WARD
+TURNER
+SMITH
+SCOTT
+MILLER
+MARTIN
+KIRK
+KING
+JONES
+JAMES
+FORD
+CLARK
+BLAKE
+ALLEN
+ADAMS
+
+(15 row(s) affected)
+
+
+--6.	Change the column datatype from int to char for the grade column in the salgrade table, 
+	show the old column value and the new and give the new column a name
+
+SELECT GRADE, CAST (GRADE as CHAR(10)) as NEWGRADE
+FROM SALGRADE
+
+GRADE       NEWGRADE
+----------- ----------
+1           1         
+2           2         
+3           3         
+4           4         
+5           5         
+
+(5 row(s) affected)
+
+
+--7.	List the names of all emp, right justify them by adding blanks to each so that all the names 
+	are 30 characters long (This one takes some imagination)
+
+SELECT SPACE (30- LEN(ENAME)) + RTRIM (ENAME) as NAME
+FROM EMP
+
+NAME
+-----------------------------------
+                         SMITH
+                         ALLEN
+                          WARD
+                         JONES
+                        MARTIN
+                         BLAKE
+                         CLARK
+                         SCOTT
+                          KING
+                        TURNER
+                         ADAMS
+                         JAMES
+                          FORD
+                        MILLER
+                          KIRK
+
+(15 row(s) affected)
+
+
+--8.	List all employees salaries, also a column that gives them a raise of 13%, dollar amts never have more than 2 decimal places.
+
+SELECT SAL, CONVERT(decimal(7,2),ROUND (SAL*.13, 2)) as RAISE
+FROM EMP
+
+SAL                                     RAISE
+--------------------------------------- ---------------------------------------
+800.00                                  104.00
+1600.00                                 208.00
+1250.00                                 162.50
+2975.00                                 386.75
+1250.00                                 162.50
+2850.00                                 370.50
+2450.00                                 318.50
+3000.00                                 390.00
+5000.00                                 650.00
+1500.00                                 195.00
+1100.00                                 143.00
+950.00                                  123.50
+3000.00                                 390.00
+1300.00                                 169.00
+6000.00                                 780.00
+
+(15 row(s) affected)
+
+
+--9.	List the system date, extract off just the year and list that also.  Use the DUMMY table in your FROM clause.
+
+SELECT SYSDATETIME () as 'TIME AND DATE', YEAR (SYSDATETIME ())as 'YEAR'
+FROM DUMMY
+
+TIME AND DATE               YEAR
+--------------------------- -----------
+2015-01-24 17:44:15.4756082 2015
+
+(1 row(s) affected)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

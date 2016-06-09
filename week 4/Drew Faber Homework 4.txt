@@ -1,0 +1,2506 @@
+1.	Select employee number, name for all employees with salaries above the average salary. Use a subquery. 
+
+SELECT EMPNO, ENAME
+FROM dbo.EMP
+WHERE SAL >(SELECT AVG(SAL) from dbo.EMP);
+
+EMPNO       ENAME
+----------- ----------
+7566        JONES
+7698        BLAKE
+7782        CLARK
+7788        SCOTT
+7839        KING
+7902        FORD
+9999        KIRK
+
+(7 row(s) affected)
+
+2.	Show the Student_ID, last name, and the number of enrollments for the student. Show only students with more than 2 enrollments. Use an Inline view.  
+
+3.	Show the number of students enrolled for each state and zip code for New York and where the city begins with ‘W’.  Use a Scalar subquery.  
+
+SELECT COUNT(STUDENT_ID) AS STUDENTS, ZIP
+FROM dbo.STUDENT WHERE ZIP 
+IN (SELECT ZIP FROM ZIPCODE WHERE CITY = 'New York' OR CITY LIKE 'W%')
+GROUP BY ZIP;
+
+STUDENTS    ZIP
+----------- -----
+1           02189
+1           06798
+2           06880
+1           07057
+1           07090
+3           10025
+1           10048
+2           11357
+4           11377
+1           11552
+
+(10 row(s) affected)
+
+4.	Display the course number and description of courses with no enrollment. Also include courses which have no section assigned.  Use an EXISTS
+
+SELECT COURSE_NO, DESCRIPTION FROM COURSE
+WHERE EXISTS 
+(
+SELECT COURSE_NO FROM SECTION
+WHERE SECTION_ID 
+IN  
+(
+SELECT SECTION_ID FROM ENROLLMENT
+));
+
+COURSE_NO   DESCRIPTION
+----------- --------------------------------------------------
+10          DP Overview
+20          Intro to Computers
+25          Intro to Programming
+80          Structured Programming Techniques
+100         Hands-On Windows
+120         Intro to Java Programming
+122         Intermediate Java Programming
+124         Advanced Java Programming
+125         JDeveloper
+130         Intro to Unix
+132         Basics of Unix Admin
+134         Advanced Unix Admin
+135         Unix Tips and Techniques
+140         Structured Analysis
+142         Project Management
+144         Database Design
+145         Internet Protocols
+146         Java for C/C++ Programmers
+147         GUI Programming
+204         Intro to SQL
+210         Oracle Tools
+220         PL/SQL Programming
+230         Intro to Internet
+240         Intro to the Basic Language
+310         Operating Systems
+330         Network Administration
+350         JDeveloper Lab
+420         Database System Principles
+430         JDeveloper Techniques
+450         DB Programming in Java
+
+(30 row(s) affected)
+
+
+5.	Show a list of all employee names and their department names and the employees for each department.  Be sure to show all departments whether there is an employee in the department or not.  Use an outer join.
+
+SELECT ENAME, DNAME
+FROM dbo.DEPT
+LEFT OUTER JOIN 
+dbo.EMP
+On dbo.DEPT.DEPTNO = emp.DEPTNO
+ORDER BY DNAME
+
+ENAME      DNAME
+---------- --------------
+CLARK      ACCOUNTING
+KING       ACCOUNTING
+MILLER     ACCOUNTING
+NULL       OPERATIONS
+SMITH      RESEARCH
+JONES      RESEARCH
+SCOTT      RESEARCH
+ADAMS      RESEARCH
+FORD       RESEARCH
+ALLEN      SALES
+WARD       SALES
+MARTIN     SALES
+BLAKE      SALES
+TURNER     SALES
+JAMES      SALES
+NULL       STARFLEET
+
+(16 row(s) affected)
+
+6.	Select all employee names and their department names.  Be sure to show all employees whether they are assigned to a department or not.  Use an outer join.
+
+SELECT ENAME, DNAME
+FROM dbo.EMP
+LEFT OUTER JOIN 
+dbo.DEPT
+On dbo.DEPT.DEPTNO = emp.DEPTNO
+ORDER BY DNAME
+
+ENAME      DNAME
+---------- --------------
+KIRK       NULL
+MILLER     ACCOUNTING
+CLARK      ACCOUNTING
+KING       ACCOUNTING
+SCOTT      RESEARCH
+SMITH      RESEARCH
+JONES      RESEARCH
+FORD       RESEARCH
+ADAMS      RESEARCH
+JAMES      SALES
+MARTIN     SALES
+BLAKE      SALES
+ALLEN      SALES
+WARD       SALES
+TURNER     SALES
+
+(15 row(s) affected)
+
+
+7.	Write a query that that performs an inner join of the grade, student, and grade_type tables using an inner join
+
+SELECT G.NUMERIC_GRADE, S.LAST_NAME, GT.GRADE_TYPE_CODE
+FROM STUDENT S
+INNER JOIN GRADE G
+ON S.STUDENT_ID = G.STUDENT_ID
+INNER JOIN GRADE_TYPE GT
+ON G.GRADE_TYPE_CODE = GT.GRADE_TYPE_CODE
+
+NUMERIC_GRADE LAST_NAME                 GRADE_TYPE_CODE
+------------- ------------------------- ---------------
+85            Crocitto                  FI
+90            Crocitto                  HM
+99            Crocitto                  HM
+82            Crocitto                  HM
+82            Crocitto                  HM
+90            Crocitto                  MT
+85            Crocitto                  PA
+90            Crocitto                  QZ
+84            Crocitto                  QZ
+97            Crocitto                  QZ
+97            Crocitto                  QZ
+92            Crocitto                  FI
+91            Crocitto                  MT
+91            Landry                    FI
+76            Landry                    HM
+75            Landry                    HM
+98            Landry                    HM
+98            Landry                    HM
+76            Landry                    MT
+91            Landry                    PA
+76            Landry                    QZ
+90            Landry                    QZ
+83            Landry                    QZ
+73            Landry                    QZ
+92            Enison                    FI
+77            Enison                    HM
+76            Enison                    HM
+99            Enison                    HM
+99            Enison                    HM
+77            Enison                    MT
+92            Enison                    PA
+77            Enison                    QZ
+91            Enison                    QZ
+74            Enison                    QZ
+74            Enison                    QZ
+83            Moskowitz                 PA
+76            Moskowitz                 PA
+99            Moskowitz                 PA
+99            Moskowitz                 PA
+72            Moskowitz                 PA
+72            Moskowitz                 PA
+82            Moskowitz                 PA
+92            Moskowitz                 PA
+92            Moskowitz                 PA
+92            Moskowitz                 PA
+77            Moskowitz                 PA
+87            Moskowitz                 PA
+92            Moskowitz                 PJ
+84            Olvsade                   FI
+83            Olvsade                   HM
+83            Olvsade                   HM
+83            Olvsade                   HM
+73            Olvsade                   HM
+77            Olvsade                   MT
+90            Olvsade                   PA
+91            Olvsade                   QZ
+90            Olvsade                   QZ
+77            Olvsade                   FI
+76            Olvsade                   HM
+76            Olvsade                   HM
+86            Olvsade                   HM
+96            Olvsade                   HM
+90            Olvsade                   MT
+83            Olvsade                   PA
+84            Olvsade                   QZ
+83            Olvsade                   QZ
+76            Mierzwa                   FI
+76            Mierzwa                   HM
+90            Mierzwa                   HM
+83            Mierzwa                   HM
+73            Mierzwa                   HM
+96            Mierzwa                   HM
+96            Mierzwa                   HM
+96            Mierzwa                   HM
+86            Mierzwa                   HM
+86            Mierzwa                   HM
+86            Mierzwa                   HM
+91            Mierzwa                   MT
+76            Sethi                     FI
+91            Sethi                     HM
+90            Sethi                     HM
+83            Sethi                     HM
+73            Sethi                     HM
+91            Sethi                     MT
+76            Sethi                     PA
+91            Sethi                     QZ
+75            Sethi                     QZ
+98            Sethi                     QZ
+98            Sethi                     QZ
+85            Walter                    FI
+84            Walter                    HM
+84            Walter                    HM
+74            Walter                    HM
+74            Walter                    HM
+88            Walter                    MT
+91            Walter                    PA
+92            Walter                    QZ
+91            Walter                    QZ
+88            Walter                    FI
+77            Walter                    HM
+87            Walter                    HM
+97            Walter                    HM
+97            Walter                    HM
+91            Walter                    MT
+84            Walter                    PA
+85            Walter                    QZ
+84            Walter                    QZ
+83            Martin                    FI
+92            Martin                    HM
+82            Martin                    HM
+82            Martin                    HM
+82            Martin                    HM
+76            Martin                    MT
+99            Martin                    PA
+90            Martin                    QZ
+99            Martin                    QZ
+85            Martin                    FI
+85            Martin                    HM
+99            Martin                    HM
+82            Martin                    HM
+82            Martin                    HM
+95            Martin                    HM
+95            Martin                    HM
+95            Martin                    HM
+95            Martin                    HM
+85            Martin                    HM
+85            Martin                    HM
+90            Martin                    MT
+91            Noviello                  PA
+84            Noviello                  PA
+97            Noviello                  PA
+97            Noviello                  PA
+80            Noviello                  PA
+80            Noviello                  PA
+70            Noviello                  PA
+70            Noviello                  PA
+80            Noviello                  PA
+90            Noviello                  PA
+85            Noviello                  PA
+75            Noviello                  PA
+90            Noviello                  PJ
+85            Noviello                  FI
+90            Noviello                  HM
+99            Noviello                  HM
+82            Noviello                  HM
+82            Noviello                  HM
+90            Noviello                  MT
+85            Noviello                  PA
+90            Noviello                  QZ
+84            Noviello                  QZ
+97            Noviello                  QZ
+97            Noviello                  QZ
+84            Thomas                    FI
+83            Thomas                    HM
+83            Thomas                    HM
+83            Thomas                    HM
+73            Thomas                    HM
+77            Thomas                    MT
+90            Thomas                    PA
+91            Thomas                    QZ
+90            Thomas                    QZ
+76            Thomas                    FI
+76            Thomas                    HM
+90            Thomas                    HM
+83            Thomas                    HM
+73            Thomas                    HM
+96            Thomas                    HM
+96            Thomas                    HM
+96            Thomas                    HM
+86            Thomas                    HM
+86            Thomas                    HM
+86            Thomas                    HM
+91            Thomas                    MT
+76            Kulina                    FI
+76            Kulina                    HM
+90            Kulina                    HM
+83            Kulina                    HM
+73            Kulina                    HM
+96            Kulina                    HM
+96            Kulina                    HM
+96            Kulina                    HM
+86            Kulina                    HM
+86            Kulina                    HM
+86            Kulina                    HM
+91            Kulina                    MT
+83            Kulina                    FI
+92            Kulina                    MT
+77            Laporte                   FI
+77            Laporte                   HM
+91            Laporte                   HM
+74            Laporte                   HM
+74            Laporte                   HM
+97            Laporte                   HM
+97            Laporte                   HM
+87            Laporte                   HM
+87            Laporte                   HM
+87            Laporte                   HM
+77            Laporte                   HM
+92            Laporte                   MT
+84            Laporte                   FI
+83            Laporte                   MT
+84            Kuehn                     FI
+99            Kuehn                     HM
+98            Kuehn                     HM
+81            Kuehn                     HM
+81            Kuehn                     HM
+99            Kuehn                     MT
+84            Kuehn                     PA
+99            Kuehn                     QZ
+83            Kuehn                     QZ
+86            Kuehn                     QZ
+96            Kuehn                     QZ
+92            Kuehn                     FI
+91            Kuehn                     HM
+91            Kuehn                     HM
+81            Kuehn                     HM
+81            Kuehn                     HM
+85            Kuehn                     MT
+88            Kuehn                     PA
+99            Kuehn                     QZ
+98            Kuehn                     QZ
+91            Lopez                     FI
+90            Lopez                     MT
+76            Abdou                     FI
+85            Abdou                     HM
+75            Abdou                     HM
+75            Abdou                     HM
+85            Abdou                     HM
+99            Abdou                     MT
+92            Abdou                     PA
+83            Abdou                     QZ
+82            Abdou                     QZ
+77            Alexander                 FI
+76            Alexander                 HM
+76            Alexander                 HM
+86            Alexander                 HM
+96            Alexander                 HM
+90            Alexander                 MT
+83            Alexander                 PA
+84            Alexander                 QZ
+83            Alexander                 QZ
+77            Pineda                    FI
+77            Pineda                    HM
+91            Pineda                    HM
+74            Pineda                    HM
+74            Pineda                    HM
+97            Pineda                    HM
+97            Pineda                    HM
+87            Pineda                    HM
+87            Pineda                    HM
+87            Pineda                    HM
+77            Pineda                    HM
+92            Pineda                    MT
+88            Lippen                    FI
+88            Lippen                    HM
+82            Lippen                    HM
+75            Lippen                    HM
+85            Lippen                    HM
+98            Lippen                    HM
+88            Lippen                    HM
+88            Lippen                    HM
+88            Lippen                    HM
+78            Lippen                    HM
+78            Lippen                    HM
+83            Lippen                    MT
+99            Radicola                  FI
+99            Radicola                  HM
+83            Radicola                  HM
+86            Radicola                  HM
+96            Radicola                  HM
+89            Radicola                  HM
+89            Radicola                  HM
+89            Radicola                  HM
+79            Radicola                  HM
+79            Radicola                  HM
+89            Radicola                  HM
+84            Radicola                  MT
+99            Wicelinski                FI
+90            Wicelinski                FI
+90            Wicelinski                HM
+84            Wicelinski                HM
+97            Wicelinski                HM
+97            Wicelinski                HM
+80            Wicelinski                HM
+80            Wicelinski                HM
+70            Wicelinski                HM
+70            Wicelinski                HM
+80            Wicelinski                HM
+90            Wicelinski                HM
+85            Wicelinski                MT
+99            Wicelinski                FI
+88            Wicelinski                HM
+98            Wicelinski                HM
+98            Wicelinski                HM
+98            Wicelinski                HM
+92            Wicelinski                MT
+85            Wicelinski                PA
+76            Wicelinski                QZ
+75            Wicelinski                QZ
+84            Wicelinski                FI
+84            Wicelinski                HM
+98            Wicelinski                HM
+81            Wicelinski                HM
+81            Wicelinski                HM
+84            Wicelinski                HM
+94            Wicelinski                HM
+94            Wicelinski                HM
+94            Wicelinski                HM
+94            Wicelinski                HM
+84            Wicelinski                HM
+99            Wicelinski                MT
+85            Aung                      FI
+84            Aung                      HM
+84            Aung                      HM
+74            Aung                      HM
+74            Aung                      HM
+88            Aung                      MT
+91            Aung                      PA
+92            Aung                      QZ
+91            Aung                      QZ
+84            Aung                      PA
+87            Aung                      PA
+90            Aung                      PA
+80            Aung                      PA
+73            Aung                      PA
+83            Aung                      PA
+93            Aung                      PA
+93            Aung                      PA
+93            Aung                      PA
+93            Aung                      PA
+88            Aung                      PA
+98            Aung                      PA
+83            Aung                      PJ
+91            Runyan                    FI
+76            Runyan                    HM
+75            Runyan                    HM
+98            Runyan                    HM
+98            Runyan                    HM
+76            Runyan                    MT
+91            Runyan                    PA
+76            Runyan                    QZ
+90            Runyan                    QZ
+83            Runyan                    QZ
+73            Runyan                    QZ
+76            Grant                     FI
+91            Grant                     HM
+90            Grant                     HM
+83            Grant                     HM
+73            Grant                     HM
+91            Grant                     MT
+76            Grant                     PA
+91            Grant                     QZ
+75            Grant                     QZ
+98            Grant                     QZ
+98            Grant                     QZ
+90            Oates                     FI
+85            Oates                     HM
+84            Oates                     HM
+97            Oates                     HM
+97            Oates                     HM
+85            Oates                     MT
+90            Oates                     PA
+85            Oates                     QZ
+99            Oates                     QZ
+82            Oates                     QZ
+82            Oates                     QZ
+77            Oates                     FI
+76            Oates                     HM
+76            Oates                     HM
+86            Oates                     HM
+96            Oates                     HM
+90            Oates                     MT
+83            Oates                     PA
+84            Oates                     QZ
+83            Oates                     QZ
+99            Reed                      FI
+88            Reed                      HM
+98            Reed                      HM
+98            Reed                      HM
+98            Reed                      HM
+92            Reed                      MT
+85            Reed                      PA
+76            Reed                      QZ
+75            Reed                      QZ
+76            Reed                      FI
+91            Reed                      HM
+90            Reed                      HM
+83            Reed                      HM
+73            Reed                      HM
+91            Reed                      MT
+76            Reed                      PA
+91            Reed                      QZ
+75            Reed                      QZ
+98            Reed                      QZ
+98            Reed                      QZ
+92            Torres                    FI
+77            Torres                    HM
+76            Torres                    HM
+99            Torres                    HM
+99            Torres                    HM
+77            Torres                    MT
+92            Torres                    PA
+77            Torres                    QZ
+91            Torres                    QZ
+74            Torres                    QZ
+74            Torres                    QZ
+76            Masser                    FI
+85            Masser                    HM
+75            Masser                    HM
+75            Masser                    HM
+85            Masser                    HM
+99            Masser                    MT
+92            Masser                    PA
+83            Masser                    QZ
+82            Masser                    QZ
+83            Lasseter                  FI
+92            Lasseter                  MT
+84            Miller                    FI
+83            Miller                    MT
+84            Smith                     FI
+83            Smith                     HM
+83            Smith                     HM
+83            Smith                     HM
+73            Smith                     HM
+77            Smith                     MT
+90            Smith                     PA
+91            Smith                     QZ
+90            Smith                     QZ
+88            Smith                     FI
+77            Smith                     HM
+87            Smith                     HM
+97            Smith                     HM
+97            Smith                     HM
+91            Smith                     MT
+84            Smith                     PA
+85            Smith                     QZ
+84            Smith                     QZ
+76            Garshman                  FI
+85            Garshman                  HM
+75            Garshman                  HM
+75            Garshman                  HM
+85            Garshman                  HM
+99            Garshman                  MT
+92            Garshman                  PA
+83            Garshman                  QZ
+82            Garshman                  QZ
+85            Baltazar                  FI
+90            Baltazar                  HM
+99            Baltazar                  HM
+82            Baltazar                  HM
+82            Baltazar                  HM
+90            Baltazar                  MT
+85            Baltazar                  PA
+90            Baltazar                  QZ
+84            Baltazar                  QZ
+97            Baltazar                  QZ
+97            Baltazar                  QZ
+84            Boyd                      FI
+99            Boyd                      HM
+98            Boyd                      HM
+81            Boyd                      HM
+81            Boyd                      HM
+99            Boyd                      MT
+84            Boyd                      PA
+99            Boyd                      QZ
+83            Boyd                      QZ
+86            Boyd                      QZ
+96            Boyd                      QZ
+92            Waldman                   FI
+92            Waldman                   HM
+76            Waldman                   HM
+99            Waldman                   HM
+99            Waldman                   HM
+72            Waldman                   HM
+72            Waldman                   HM
+82            Waldman                   HM
+92            Waldman                   HM
+92            Waldman                   HM
+92            Waldman                   HM
+77            Waldman                   MT
+92            Biers                     FI
+91            Biers                     HM
+91            Biers                     HM
+81            Biers                     HM
+81            Biers                     HM
+85            Biers                     MT
+88            Biers                     PA
+99            Biers                     QZ
+98            Biers                     QZ
+99            Essner                    FI
+88            Essner                    HM
+98            Essner                    HM
+98            Essner                    HM
+98            Essner                    HM
+92            Essner                    MT
+85            Essner                    PA
+76            Essner                    QZ
+75            Essner                    QZ
+91            Lefkowitz                 FI
+76            Lefkowitz                 HM
+75            Lefkowitz                 HM
+98            Lefkowitz                 HM
+98            Lefkowitz                 HM
+76            Lefkowitz                 MT
+91            Lefkowitz                 PA
+76            Lefkowitz                 QZ
+90            Lefkowitz                 QZ
+83            Lefkowitz                 QZ
+73            Lefkowitz                 QZ
+84            German                    FI
+99            German                    HM
+98            German                    HM
+81            German                    HM
+81            German                    HM
+99            German                    MT
+84            German                    PA
+99            German                    QZ
+83            German                    QZ
+86            German                    QZ
+96            German                    QZ
+99            Cahouet                   FI
+84            Cahouet                   HM
+83            Cahouet                   HM
+86            Cahouet                   HM
+96            Cahouet                   HM
+84            Cahouet                   MT
+99            Cahouet                   PA
+84            Cahouet                   QZ
+98            Cahouet                   QZ
+81            Cahouet                   QZ
+81            Cahouet                   QZ
+76            Cahouet                   FI
+91            Cahouet                   HM
+90            Cahouet                   HM
+83            Cahouet                   HM
+73            Cahouet                   HM
+91            Cahouet                   MT
+76            Cahouet                   PA
+91            Cahouet                   QZ
+75            Cahouet                   QZ
+98            Cahouet                   QZ
+98            Cahouet                   QZ
+91            Orent                     FI
+90            Orent                     HM
+90            Orent                     HM
+90            Orent                     HM
+80            Orent                     HM
+84            Orent                     MT
+77            Orent                     PA
+88            Orent                     QZ
+87            Orent                     QZ
+85            Prochaska                 FI
+90            Prochaska                 HM
+99            Prochaska                 HM
+82            Prochaska                 HM
+82            Prochaska                 HM
+90            Prochaska                 MT
+85            Prochaska                 PA
+90            Prochaska                 QZ
+84            Prochaska                 QZ
+97            Prochaska                 QZ
+97            Prochaska                 QZ
+85            Gates                     FI
+84            Gates                     MT
+76            Sheppard                  FI
+85            Sheppard                  MT
+77            Edwards                   FI
+76            Edwards                   MT
+83            Philpotts                 PA
+76            Philpotts                 PA
+99            Philpotts                 PA
+99            Philpotts                 PA
+72            Philpotts                 PA
+72            Philpotts                 PA
+82            Philpotts                 PA
+92            Philpotts                 PA
+92            Philpotts                 PA
+92            Philpotts                 PA
+77            Philpotts                 PA
+87            Philpotts                 PA
+92            Philpotts                 PJ
+99            Dennis                    PA
+82            Dennis                    PA
+75            Dennis                    PA
+85            Dennis                    PA
+98            Dennis                    PA
+88            Dennis                    PA
+88            Dennis                    PA
+88            Dennis                    PA
+78            Dennis                    PA
+78            Dennis                    PA
+83            Dennis                    PA
+83            Dennis                    PA
+88            Dennis                    PJ
+76            Grant                     FI
+91            Grant                     HM
+90            Grant                     HM
+83            Grant                     HM
+73            Grant                     HM
+91            Grant                     MT
+76            Grant                     PA
+91            Grant                     QZ
+75            Grant                     QZ
+98            Grant                     QZ
+98            Grant                     QZ
+77            Jameson                   FI
+92            Jameson                   HM
+91            Jameson                   HM
+74            Jameson                   HM
+74            Jameson                   HM
+92            Jameson                   MT
+77            Jameson                   PA
+92            Jameson                   QZ
+76            Jameson                   QZ
+99            Jameson                   QZ
+99            Jameson                   QZ
+88            Limate                    FI
+77            Limate                    MT
+83            Edwards                   FI
+92            Edwards                   HM
+82            Edwards                   HM
+82            Edwards                   HM
+82            Edwards                   HM
+76            Edwards                   MT
+99            Edwards                   PA
+90            Edwards                   QZ
+99            Edwards                   QZ
+83            Beitler                   FI
+92            Beitler                   HM
+82            Beitler                   HM
+82            Beitler                   HM
+82            Beitler                   HM
+76            Beitler                   MT
+99            Beitler                   PA
+90            Beitler                   QZ
+99            Beitler                   QZ
+76            Grant                     FI
+85            Grant                     HM
+75            Grant                     HM
+75            Grant                     HM
+85            Grant                     HM
+99            Grant                     MT
+92            Grant                     PA
+83            Grant                     QZ
+82            Grant                     QZ
+92            Andrew                    PA
+75            Andrew                    PA
+98            Andrew                    PA
+98            Andrew                    PA
+81            Andrew                    PA
+71            Andrew                    PA
+71            Andrew                    PA
+81            Andrew                    PA
+91            Andrew                    PA
+91            Andrew                    PA
+76            Andrew                    PA
+76            Andrew                    PA
+91            Andrew                    PJ
+91            Gillen                    FI
+90            Gillen                    MT
+88            Perrin                    FI
+77            Perrin                    MT
+85            Daly                      FI
+84            Daly                      MT
+90            Jodoin                    PA
+83            Jodoin                    PA
+86            Jodoin                    PA
+96            Jodoin                    PA
+89            Jodoin                    PA
+89            Jodoin                    PA
+89            Jodoin                    PA
+79            Jodoin                    PA
+79            Jodoin                    PA
+89            Jodoin                    PA
+84            Jodoin                    PA
+84            Jodoin                    PA
+99            Jodoin                    PJ
+91            Joas                      PA
+84            Joas                      PA
+97            Joas                      PA
+97            Joas                      PA
+80            Joas                      PA
+80            Joas                      PA
+70            Joas                      PA
+70            Joas                      PA
+80            Joas                      PA
+90            Joas                      PA
+85            Joas                      PA
+75            Joas                      PA
+90            Joas                      PJ
+83            Naso                      PA
+76            Naso                      PA
+99            Naso                      PA
+99            Naso                      PA
+72            Naso                      PA
+72            Naso                      PA
+82            Naso                      PA
+92            Naso                      PA
+92            Naso                      PA
+92            Naso                      PA
+77            Naso                      PA
+87            Naso                      PA
+92            Naso                      PJ
+77            McLean                    FI
+76            McLean                    MT
+76            Balterzar                 FI
+85            Balterzar                 MT
+88            Brownstein                FI
+83            Brownstein                HM
+82            Brownstein                HM
+75            Brownstein                HM
+85            Brownstein                HM
+83            Brownstein                MT
+88            Brownstein                PA
+83            Brownstein                QZ
+87            Brownstein                QZ
+90            Brownstein                QZ
+80            Brownstein                QZ
+85            Arias                     PA
+98            Arias                     PA
+81            Arias                     PA
+81            Arias                     PA
+84            Arias                     PA
+94            Arias                     PA
+94            Arias                     PA
+94            Arias                     PA
+94            Arias                     PA
+84            Arias                     PA
+99            Arias                     PA
+99            Arias                     PA
+84            Arias                     PJ
+88            McGill                    FI
+77            McGill                    MT
+77            McGill                    FI
+76            McGill                    MT
+88            Brown                     FI
+77            Brown                     MT
+88            Boyce                     FI
+77            Boyce                     HM
+87            Boyce                     HM
+97            Boyce                     HM
+97            Boyce                     HM
+91            Boyce                     MT
+84            Boyce                     PA
+85            Boyce                     QZ
+84            Boyce                     QZ
+77            Satterfield               PA
+90            Satterfield               PA
+83            Satterfield               PA
+73            Satterfield               PA
+96            Satterfield               PA
+96            Satterfield               PA
+96            Satterfield               PA
+86            Satterfield               PA
+86            Satterfield               PA
+86            Satterfield               PA
+91            Satterfield               PA
+91            Satterfield               PA
+76            Satterfield               PJ
+85            Satterfield               FI
+85            Satterfield               HM
+99            Satterfield               HM
+82            Satterfield               HM
+82            Satterfield               HM
+95            Satterfield               HM
+95            Satterfield               HM
+95            Satterfield               HM
+95            Satterfield               HM
+85            Satterfield               HM
+85            Satterfield               HM
+90            Satterfield               MT
+77            Kurtz                     FI
+92            Kurtz                     HM
+91            Kurtz                     HM
+74            Kurtz                     HM
+74            Kurtz                     HM
+92            Kurtz                     MT
+77            Kurtz                     PA
+92            Kurtz                     QZ
+76            Kurtz                     QZ
+99            Kurtz                     QZ
+99            Kurtz                     QZ
+76            Kurtz                     FI
+91            Kurtz                     HM
+90            Kurtz                     HM
+83            Kurtz                     HM
+73            Kurtz                     HM
+91            Kurtz                     MT
+76            Kurtz                     PA
+91            Kurtz                     QZ
+75            Kurtz                     QZ
+98            Kurtz                     QZ
+98            Kurtz                     QZ
+90            Ramesh                    FI
+99            Ramesh                    HM
+99            Ramesh                    HM
+99            Ramesh                    HM
+99            Ramesh                    HM
+83            Ramesh                    MT
+76            Ramesh                    PA
+77            Ramesh                    QZ
+76            Ramesh                    QZ
+91            Torres                    FI
+90            Torres                    HM
+90            Torres                    HM
+90            Torres                    HM
+80            Torres                    HM
+84            Torres                    MT
+77            Torres                    PA
+88            Torres                    QZ
+87            Torres                    QZ
+83            Torres                    FI
+92            Torres                    HM
+82            Torres                    HM
+82            Torres                    HM
+82            Torres                    HM
+76            Torres                    MT
+99            Torres                    PA
+90            Torres                    QZ
+99            Torres                    QZ
+90            Bullock                   FI
+85            Bullock                   HM
+84            Bullock                   HM
+97            Bullock                   HM
+97            Bullock                   HM
+85            Bullock                   MT
+90            Bullock                   PA
+85            Bullock                   QZ
+99            Bullock                   QZ
+82            Bullock                   QZ
+82            Bullock                   QZ
+91            Delbrun                   FI
+76            Delbrun                   HM
+75            Delbrun                   HM
+98            Delbrun                   HM
+98            Delbrun                   HM
+76            Delbrun                   MT
+91            Delbrun                   PA
+76            Delbrun                   QZ
+90            Delbrun                   QZ
+83            Delbrun                   QZ
+73            Delbrun                   QZ
+92            Zuckerberg                FI
+91            Zuckerberg                HM
+91            Zuckerberg                HM
+81            Zuckerberg                HM
+81            Zuckerberg                HM
+85            Zuckerberg                MT
+88            Zuckerberg                PA
+99            Zuckerberg                QZ
+98            Zuckerberg                QZ
+99            Zuckerberg                FI
+88            Zuckerberg                HM
+98            Zuckerberg                HM
+98            Zuckerberg                HM
+98            Zuckerberg                HM
+92            Zuckerberg                MT
+85            Zuckerberg                PA
+76            Zuckerberg                QZ
+75            Zuckerberg                QZ
+85            Zuckerberg                FI
+84            Zuckerberg                HM
+84            Zuckerberg                HM
+74            Zuckerberg                HM
+74            Zuckerberg                HM
+88            Zuckerberg                MT
+91            Zuckerberg                PA
+92            Zuckerberg                QZ
+91            Zuckerberg                QZ
+83            Mehta                     FI
+92            Mehta                     HM
+82            Mehta                     HM
+82            Mehta                     HM
+82            Mehta                     HM
+76            Mehta                     MT
+99            Mehta                     PA
+90            Mehta                     QZ
+99            Mehta                     QZ
+90            Sheppard                  FI
+99            Sheppard                  HM
+99            Sheppard                  HM
+99            Sheppard                  HM
+99            Sheppard                  HM
+83            Sheppard                  MT
+76            Sheppard                  PA
+77            Sheppard                  QZ
+76            Sheppard                  QZ
+88            Garnes                    FI
+83            Garnes                    HM
+82            Garnes                    HM
+75            Garnes                    HM
+85            Garnes                    HM
+83            Garnes                    MT
+88            Garnes                    PA
+83            Garnes                    QZ
+87            Garnes                    QZ
+90            Garnes                    QZ
+80            Garnes                    QZ
+92            Gilloon                   FI
+77            Gilloon                   HM
+76            Gilloon                   HM
+99            Gilloon                   HM
+99            Gilloon                   HM
+77            Gilloon                   MT
+92            Gilloon                   PA
+77            Gilloon                   QZ
+91            Gilloon                   QZ
+74            Gilloon                   QZ
+74            Gilloon                   QZ
+84            Reyes                     FI
+83            Reyes                     HM
+83            Reyes                     HM
+83            Reyes                     HM
+73            Reyes                     HM
+77            Reyes                     MT
+90            Reyes                     PA
+91            Reyes                     QZ
+90            Reyes                     QZ
+99            Reyes                     PA
+82            Reyes                     PA
+75            Reyes                     PA
+85            Reyes                     PA
+98            Reyes                     PA
+88            Reyes                     PA
+88            Reyes                     PA
+88            Reyes                     PA
+78            Reyes                     PA
+78            Reyes                     PA
+83            Reyes                     PA
+83            Reyes                     PA
+88            Reyes                     PJ
+83            Affinito                  FI
+88            Affinito                  HM
+87            Affinito                  HM
+90            Affinito                  HM
+80            Affinito                  HM
+88            Affinito                  MT
+83            Affinito                  PA
+88            Affinito                  QZ
+82            Affinito                  QZ
+75            Affinito                  QZ
+85            Affinito                  QZ
+84            M. Orent                  FI
+99            M. Orent                  HM
+98            M. Orent                  HM
+81            M. Orent                  HM
+81            M. Orent                  HM
+99            M. Orent                  MT
+84            M. Orent                  PA
+99            M. Orent                  QZ
+83            M. Orent                  QZ
+86            M. Orent                  QZ
+96            M. Orent                  QZ
+85            Viotty                    FI
+90            Viotty                    HM
+99            Viotty                    HM
+82            Viotty                    HM
+82            Viotty                    HM
+90            Viotty                    MT
+85            Viotty                    PA
+90            Viotty                    QZ
+84            Viotty                    QZ
+97            Viotty                    QZ
+97            Viotty                    QZ
+84            Jamerncy                  FI
+83            Jamerncy                  HM
+83            Jamerncy                  HM
+83            Jamerncy                  HM
+73            Jamerncy                  HM
+77            Jamerncy                  MT
+90            Jamerncy                  PA
+91            Jamerncy                  QZ
+90            Jamerncy                  QZ
+85            Grant                     FI
+84            Grant                     HM
+84            Grant                     HM
+74            Grant                     HM
+74            Grant                     HM
+88            Grant                     MT
+91            Grant                     PA
+92            Grant                     QZ
+91            Grant                     QZ
+99            Bose                      FI
+88            Bose                      HM
+98            Bose                      HM
+98            Bose                      HM
+98            Bose                      HM
+92            Bose                      MT
+85            Bose                      PA
+76            Bose                      QZ
+75            Bose                      QZ
+84            Meshaj                    FI
+83            Meshaj                    HM
+83            Meshaj                    HM
+83            Meshaj                    HM
+73            Meshaj                    HM
+77            Meshaj                    MT
+90            Meshaj                    PA
+91            Meshaj                    QZ
+90            Meshaj                    QZ
+85            Dalvi                     FI
+84            Dalvi                     HM
+84            Dalvi                     HM
+74            Dalvi                     HM
+74            Dalvi                     HM
+88            Dalvi                     MT
+91            Dalvi                     PA
+92            Dalvi                     QZ
+91            Dalvi                     QZ
+85            Allende                   FI
+84            Allende                   HM
+84            Allende                   HM
+74            Allende                   HM
+74            Allende                   HM
+88            Allende                   MT
+91            Allende                   PA
+92            Allende                   QZ
+91            Allende                   QZ
+99            Segall                    FI
+88            Segall                    MT
+76            Segall                    FI
+91            Segall                    HM
+90            Segall                    HM
+83            Segall                    HM
+73            Segall                    HM
+91            Segall                    MT
+76            Segall                    PA
+91            Segall                    QZ
+75            Segall                    QZ
+98            Segall                    QZ
+98            Segall                    QZ
+92            Bresser, HR Rep.          FI
+77            Bresser, HR Rep.          HM
+76            Bresser, HR Rep.          HM
+99            Bresser, HR Rep.          HM
+99            Bresser, HR Rep.          HM
+77            Bresser, HR Rep.          MT
+92            Bresser, HR Rep.          PA
+77            Bresser, HR Rep.          QZ
+91            Bresser, HR Rep.          QZ
+74            Bresser, HR Rep.          QZ
+74            Bresser, HR Rep.          QZ
+84            Bresser, HR Rep.          PA
+87            Bresser, HR Rep.          PA
+90            Bresser, HR Rep.          PA
+80            Bresser, HR Rep.          PA
+73            Bresser, HR Rep.          PA
+83            Bresser, HR Rep.          PA
+93            Bresser, HR Rep.          PA
+93            Bresser, HR Rep.          PA
+93            Bresser, HR Rep.          PA
+93            Bresser, HR Rep.          PA
+88            Bresser, HR Rep.          PA
+98            Bresser, HR Rep.          PA
+83            Bresser, HR Rep.          PJ
+83            Lefbowitz                 FI
+83            Lefbowitz                 HM
+87            Lefbowitz                 HM
+90            Lefbowitz                 HM
+80            Lefbowitz                 HM
+73            Lefbowitz                 HM
+83            Lefbowitz                 HM
+93            Lefbowitz                 HM
+93            Lefbowitz                 HM
+93            Lefbowitz                 HM
+93            Lefbowitz                 HM
+88            Lefbowitz                 MT
+99            Axch                      FI
+88            Axch                      HM
+98            Axch                      HM
+98            Axch                      HM
+98            Axch                      HM
+92            Axch                      MT
+85            Axch                      PA
+76            Axch                      QZ
+75            Axch                      QZ
+76            Cook                      FI
+76            Cook                      HM
+90            Cook                      HM
+83            Cook                      HM
+73            Cook                      HM
+96            Cook                      HM
+96            Cook                      HM
+96            Cook                      HM
+86            Cook                      HM
+86            Cook                      HM
+86            Cook                      HM
+91            Cook                      MT
+92            Griffen                   PA
+75            Griffen                   PA
+98            Griffen                   PA
+98            Griffen                   PA
+81            Griffen                   PA
+71            Griffen                   PA
+71            Griffen                   PA
+81            Griffen                   PA
+91            Griffen                   PA
+91            Griffen                   PA
+76            Griffen                   PA
+76            Griffen                   PA
+91            Griffen                   PJ
+83            Hutheesing                PA
+76            Hutheesing                PA
+99            Hutheesing                PA
+99            Hutheesing                PA
+72            Hutheesing                PA
+72            Hutheesing                PA
+82            Hutheesing                PA
+92            Hutheesing                PA
+92            Hutheesing                PA
+92            Hutheesing                PA
+77            Hutheesing                PA
+87            Hutheesing                PA
+92            Hutheesing                PJ
+90            annunziato                FI
+99            annunziato                HM
+99            annunziato                HM
+99            annunziato                HM
+99            annunziato                HM
+83            annunziato                MT
+76            annunziato                PA
+77            annunziato                QZ
+76            annunziato                QZ
+91            Montanez                  FI
+90            Montanez                  HM
+90            Montanez                  HM
+90            Montanez                  HM
+80            Montanez                  HM
+84            Montanez                  MT
+77            Montanez                  PA
+88            Montanez                  QZ
+87            Montanez                  QZ
+88            Tucker                    FI
+83            Tucker                    HM
+82            Tucker                    HM
+75            Tucker                    HM
+85            Tucker                    HM
+83            Tucker                    MT
+88            Tucker                    PA
+83            Tucker                    QZ
+87            Tucker                    QZ
+90            Tucker                    QZ
+80            Tucker                    QZ
+99            Kellam                    FI
+84            Kellam                    HM
+83            Kellam                    HM
+86            Kellam                    HM
+96            Kellam                    HM
+84            Kellam                    MT
+99            Kellam                    PA
+84            Kellam                    QZ
+98            Kellam                    QZ
+81            Kellam                    QZ
+81            Kellam                    QZ
+90            Thares                    FI
+85            Thares                    HM
+84            Thares                    HM
+97            Thares                    HM
+97            Thares                    HM
+85            Thares                    MT
+90            Thares                    PA
+85            Thares                    QZ
+99            Thares                    QZ
+82            Thares                    QZ
+82            Thares                    QZ
+77            Goldsmith                 FI
+92            Goldsmith                 HM
+91            Goldsmith                 HM
+74            Goldsmith                 HM
+74            Goldsmith                 HM
+92            Goldsmith                 MT
+77            Goldsmith                 PA
+92            Goldsmith                 QZ
+76            Goldsmith                 QZ
+99            Goldsmith                 QZ
+99            Goldsmith                 QZ
+90            Goldsmith                 FI
+99            Goldsmith                 HM
+99            Goldsmith                 HM
+99            Goldsmith                 HM
+99            Goldsmith                 HM
+83            Goldsmith                 MT
+76            Goldsmith                 PA
+77            Goldsmith                 QZ
+76            Goldsmith                 QZ
+88            Robichaud                 FI
+83            Robichaud                 HM
+82            Robichaud                 HM
+75            Robichaud                 HM
+85            Robichaud                 HM
+83            Robichaud                 MT
+88            Robichaud                 PA
+83            Robichaud                 QZ
+87            Robichaud                 QZ
+90            Robichaud                 QZ
+80            Robichaud                 QZ
+92            Williams                  FI
+91            Williams                  HM
+91            Williams                  HM
+81            Williams                  HM
+81            Williams                  HM
+85            Williams                  MT
+88            Williams                  PA
+99            Williams                  QZ
+98            Williams                  QZ
+77            Williams                  FI
+92            Williams                  HM
+91            Williams                  HM
+74            Williams                  HM
+74            Williams                  HM
+92            Williams                  MT
+77            Williams                  PA
+92            Williams                  QZ
+76            Williams                  QZ
+99            Williams                  QZ
+99            Williams                  QZ
+76            Williams                  FI
+85            Williams                  HM
+75            Williams                  HM
+75            Williams                  HM
+85            Williams                  HM
+99            Williams                  MT
+92            Williams                  PA
+83            Williams                  QZ
+82            Williams                  QZ
+99            Williams                  FI
+88            Williams                  MT
+88            Chatman                   FI
+83            Chatman                   HM
+82            Chatman                   HM
+75            Chatman                   HM
+85            Chatman                   HM
+83            Chatman                   MT
+88            Chatman                   PA
+83            Chatman                   QZ
+87            Chatman                   QZ
+90            Chatman                   QZ
+80            Chatman                   QZ
+77            Chatman                   FI
+76            Chatman                   HM
+76            Chatman                   HM
+86            Chatman                   HM
+96            Chatman                   HM
+90            Chatman                   MT
+83            Chatman                   PA
+84            Chatman                   QZ
+83            Chatman                   QZ
+90            Chatman                   FI
+99            Chatman                   MT
+77            Dusenberry                FI
+77            Dusenberry                HM
+91            Dusenberry                HM
+74            Dusenberry                HM
+74            Dusenberry                HM
+97            Dusenberry                HM
+97            Dusenberry                HM
+87            Dusenberry                HM
+87            Dusenberry                HM
+87            Dusenberry                HM
+77            Dusenberry                HM
+92            Dusenberry                MT
+99            Citron                    FI
+84            Citron                    HM
+83            Citron                    HM
+86            Citron                    HM
+96            Citron                    HM
+84            Citron                    MT
+99            Citron                    PA
+84            Citron                    QZ
+98            Citron                    QZ
+81            Citron                    QZ
+81            Citron                    QZ
+92            Da Silva                  FI
+91            Da Silva                  MT
+85            Segall                    FI
+84            Segall                    HM
+84            Segall                    HM
+74            Segall                    HM
+74            Segall                    HM
+88            Segall                    MT
+91            Segall                    PA
+92            Segall                    QZ
+91            Segall                    QZ
+77            Malone                    FI
+76            Malone                    HM
+76            Malone                    HM
+86            Malone                    HM
+96            Malone                    HM
+90            Malone                    MT
+83            Malone                    PA
+84            Malone                    QZ
+83            Malone                    QZ
+88            Pace                      FI
+77            Pace                      HM
+87            Pace                      HM
+97            Pace                      HM
+97            Pace                      HM
+91            Pace                      MT
+84            Pace                      PA
+85            Pace                      QZ
+84            Pace                      QZ
+76            Pace                      FI
+85            Pace                      HM
+75            Pace                      HM
+75            Pace                      HM
+85            Pace                      HM
+99            Pace                      MT
+92            Pace                      PA
+83            Pace                      QZ
+82            Pace                      QZ
+99            Diokno                    FI
+88            Diokno                    MT
+90            Moffat                    FI
+99            Moffat                    MT
+91            Heedles                   FI
+90            Heedles                   MT
+85            Heedles                   FI
+84            Heedles                   HM
+84            Heedles                   HM
+74            Heedles                   HM
+74            Heedles                   HM
+88            Heedles                   MT
+91            Heedles                   PA
+92            Heedles                   QZ
+91            Heedles                   QZ
+85            Valentine                 FI
+85            Valentine                 HM
+99            Valentine                 HM
+82            Valentine                 HM
+82            Valentine                 HM
+95            Valentine                 HM
+95            Valentine                 HM
+95            Valentine                 HM
+95            Valentine                 HM
+85            Valentine                 HM
+85            Valentine                 HM
+90            Valentine                 MT
+85            Lopez                     FI
+85            Lopez                     HM
+99            Lopez                     HM
+82            Lopez                     HM
+82            Lopez                     HM
+95            Lopez                     HM
+95            Lopez                     HM
+95            Lopez                     HM
+95            Lopez                     HM
+85            Lopez                     HM
+85            Lopez                     HM
+90            Lopez                     MT
+90            Kocka                     FI
+85            Kocka                     HM
+84            Kocka                     HM
+97            Kocka                     HM
+97            Kocka                     HM
+85            Kocka                     MT
+90            Kocka                     PA
+85            Kocka                     QZ
+99            Kocka                     QZ
+82            Kocka                     QZ
+82            Kocka                     QZ
+76            Jung                      FI
+85            Jung                      MT
+91            Jung                      FI
+76            Jung                      HM
+75            Jung                      HM
+98            Jung                      HM
+98            Jung                      HM
+76            Jung                      MT
+91            Jung                      PA
+76            Jung                      QZ
+90            Jung                      QZ
+83            Jung                      QZ
+73            Jung                      QZ
+84            Jung                      PA
+87            Jung                      PA
+90            Jung                      PA
+80            Jung                      PA
+73            Jung                      PA
+83            Jung                      PA
+93            Jung                      PA
+93            Jung                      PA
+93            Jung                      PA
+93            Jung                      PA
+88            Jung                      PA
+98            Jung                      PA
+83            Jung                      PJ
+83            Mulroy                    FI
+92            Mulroy                    MT
+77            Mulroy                    FI
+76            Mulroy                    HM
+76            Mulroy                    HM
+86            Mulroy                    HM
+96            Mulroy                    HM
+90            Mulroy                    MT
+83            Mulroy                    PA
+84            Mulroy                    QZ
+83            Mulroy                    QZ
+90            Brendler                  PA
+83            Brendler                  PA
+86            Brendler                  PA
+96            Brendler                  PA
+89            Brendler                  PA
+89            Brendler                  PA
+89            Brendler                  PA
+79            Brendler                  PA
+79            Brendler                  PA
+89            Brendler                  PA
+84            Brendler                  PA
+84            Brendler                  PA
+99            Brendler                  PJ
+90            Carcia                    FI
+99            Carcia                    MT
+99            Carcia                    FI
+88            Carcia                    MT
+90            Tripp                     FI
+99            Tripp                     HM
+99            Tripp                     HM
+99            Tripp                     HM
+99            Tripp                     HM
+83            Tripp                     MT
+76            Tripp                     PA
+77            Tripp                     QZ
+76            Tripp                     QZ
+76            Tripp                     FI
+85            Tripp                     HM
+75            Tripp                     HM
+75            Tripp                     HM
+85            Tripp                     HM
+99            Tripp                     MT
+92            Tripp                     PA
+83            Tripp                     QZ
+82            Tripp                     QZ
+84            Frost                     FI
+83            Frost                     HM
+83            Frost                     HM
+83            Frost                     HM
+73            Frost                     HM
+77            Frost                     MT
+90            Frost                     PA
+91            Frost                     QZ
+90            Frost                     QZ
+91            Frost                     FI
+90            Frost                     HM
+90            Frost                     HM
+90            Frost                     HM
+80            Frost                     HM
+84            Frost                     MT
+77            Frost                     PA
+88            Frost                     QZ
+87            Frost                     QZ
+85            Snow                      FI
+84            Snow                      HM
+84            Snow                      HM
+74            Snow                      HM
+74            Snow                      HM
+88            Snow                      MT
+91            Snow                      PA
+92            Snow                      QZ
+91            Snow                      QZ
+88            Snow                      FI
+77            Snow                      HM
+87            Snow                      HM
+97            Snow                      HM
+97            Snow                      HM
+91            Snow                      MT
+84            Snow                      PA
+85            Snow                      QZ
+84            Snow                      QZ
+92            Snow                      FI
+91            Snow                      HM
+91            Snow                      HM
+81            Snow                      HM
+81            Snow                      HM
+85            Snow                      MT
+88            Snow                      PA
+99            Snow                      QZ
+98            Snow                      QZ
+83            Scrittorale               FI
+88            Scrittorale               HM
+87            Scrittorale               HM
+90            Scrittorale               HM
+80            Scrittorale               HM
+88            Scrittorale               MT
+83            Scrittorale               PA
+88            Scrittorale               QZ
+82            Scrittorale               QZ
+75            Scrittorale               QZ
+85            Scrittorale               QZ
+76            Yourish                   PA
+99            Yourish                   PA
+82            Yourish                   PA
+82            Yourish                   PA
+95            Yourish                   PA
+95            Yourish                   PA
+95            Yourish                   PA
+95            Yourish                   PA
+85            Yourish                   PA
+85            Yourish                   PA
+90            Yourish                   PA
+90            Yourish                   PA
+85            Yourish                   PJ
+76            Ordes                     FI
+76            Ordes                     HM
+90            Ordes                     HM
+83            Ordes                     HM
+73            Ordes                     HM
+96            Ordes                     HM
+96            Ordes                     HM
+96            Ordes                     HM
+86            Ordes                     HM
+86            Ordes                     HM
+86            Ordes                     HM
+91            Ordes                     MT
+99            Roberts                   FI
+88            Roberts                   HM
+98            Roberts                   HM
+98            Roberts                   HM
+98            Roberts                   HM
+92            Roberts                   MT
+85            Roberts                   PA
+76            Roberts                   QZ
+75            Roberts                   QZ
+77            Wilson                    PA
+90            Wilson                    PA
+83            Wilson                    PA
+73            Wilson                    PA
+96            Wilson                    PA
+96            Wilson                    PA
+96            Wilson                    PA
+86            Wilson                    PA
+86            Wilson                    PA
+86            Wilson                    PA
+91            Wilson                    PA
+91            Wilson                    PA
+76            Wilson                    PJ
+88            Dalvi                     PA
+91            Dalvi                     PA
+74            Dalvi                     PA
+74            Dalvi                     PA
+97            Dalvi                     PA
+97            Dalvi                     PA
+87            Dalvi                     PA
+87            Dalvi                     PA
+87            Dalvi                     PA
+77            Dalvi                     PA
+92            Dalvi                     PA
+82            Dalvi                     PA
+77            Dalvi                     PJ
+76            Owens                     FI
+85            Owens                     HM
+75            Owens                     HM
+75            Owens                     HM
+85            Owens                     HM
+99            Owens                     MT
+92            Owens                     PA
+83            Owens                     QZ
+82            Owens                     QZ
+92            Bunnell                   FI
+91            Bunnell                   MT
+77            Zapulla                   FI
+77            Zapulla                   HM
+91            Zapulla                   HM
+74            Zapulla                   HM
+74            Zapulla                   HM
+97            Zapulla                   HM
+97            Zapulla                   HM
+87            Zapulla                   HM
+87            Zapulla                   HM
+87            Zapulla                   HM
+77            Zapulla                   HM
+92            Zapulla                   MT
+77            Zapulla                   PA
+90            Zapulla                   PA
+83            Zapulla                   PA
+73            Zapulla                   PA
+96            Zapulla                   PA
+96            Zapulla                   PA
+96            Zapulla                   PA
+86            Zapulla                   PA
+86            Zapulla                   PA
+86            Zapulla                   PA
+91            Zapulla                   PA
+91            Zapulla                   PA
+76            Zapulla                   PJ
+85            Fielding                  FI
+84            Fielding                  HM
+84            Fielding                  HM
+74            Fielding                  HM
+74            Fielding                  HM
+88            Fielding                  MT
+91            Fielding                  PA
+92            Fielding                  QZ
+91            Fielding                  QZ
+88            Fielding                  FI
+77            Fielding                  HM
+87            Fielding                  HM
+97            Fielding                  HM
+97            Fielding                  HM
+91            Fielding                  MT
+84            Fielding                  PA
+85            Fielding                  QZ
+84            Fielding                  QZ
+88            Fielding                  FI
+88            Fielding                  HM
+82            Fielding                  HM
+75            Fielding                  HM
+85            Fielding                  HM
+98            Fielding                  HM
+88            Fielding                  HM
+88            Fielding                  HM
+88            Fielding                  HM
+78            Fielding                  HM
+78            Fielding                  HM
+83            Fielding                  MT
+76            Frangopoulos              FI
+85            Frangopoulos              HM
+75            Frangopoulos              HM
+75            Frangopoulos              HM
+85            Frangopoulos              HM
+99            Frangopoulos              MT
+92            Frangopoulos              PA
+83            Frangopoulos              QZ
+82            Frangopoulos              QZ
+99            Frangopoulos              FI
+88            Frangopoulos              HM
+98            Frangopoulos              HM
+98            Frangopoulos              HM
+98            Frangopoulos              HM
+92            Frangopoulos              MT
+85            Frangopoulos              PA
+76            Frangopoulos              QZ
+75            Frangopoulos              QZ
+77            Barogh                    FI
+76            Barogh                    HM
+76            Barogh                    HM
+86            Barogh                    HM
+96            Barogh                    HM
+90            Barogh                    MT
+83            Barogh                    PA
+84            Barogh                    QZ
+83            Barogh                    QZ
+90            Barogh                    FI
+99            Barogh                    HM
+99            Barogh                    HM
+99            Barogh                    HM
+99            Barogh                    HM
+83            Barogh                    MT
+76            Barogh                    PA
+77            Barogh                    QZ
+76            Barogh                    QZ
+92            Boremmann                 FI
+91            Boremmann                 MT
+91            Chamnonkool               FI
+91            Chamnonkool               HM
+75            Chamnonkool               HM
+98            Chamnonkool               HM
+98            Chamnonkool               HM
+81            Chamnonkool               HM
+71            Chamnonkool               HM
+71            Chamnonkool               HM
+81            Chamnonkool               HM
+91            Chamnonkool               HM
+91            Chamnonkool               HM
+76            Chamnonkool               MT
+92            Velasco                   FI
+92            Velasco                   HM
+76            Velasco                   HM
+99            Velasco                   HM
+99            Velasco                   HM
+72            Velasco                   HM
+72            Velasco                   HM
+82            Velasco                   HM
+92            Velasco                   HM
+92            Velasco                   HM
+92            Velasco                   HM
+77            Velasco                   MT
+83            Velasco                   FI
+92            Velasco                   MT
+84            Abid                      FI
+83            Abid                      MT
+83            Velasco                   FI
+88            Velasco                   HM
+87            Velasco                   HM
+90            Velasco                   HM
+80            Velasco                   HM
+88            Velasco                   MT
+83            Velasco                   PA
+88            Velasco                   QZ
+82            Velasco                   QZ
+75            Velasco                   QZ
+85            Velasco                   QZ
+90            Merriman                  FI
+99            Merriman                  HM
+99            Merriman                  HM
+99            Merriman                  HM
+99            Merriman                  HM
+83            Merriman                  MT
+76            Merriman                  PA
+77            Merriman                  QZ
+76            Merriman                  QZ
+99            Merriman                  FI
+84            Merriman                  HM
+83            Merriman                  HM
+86            Merriman                  HM
+96            Merriman                  HM
+84            Merriman                  MT
+99            Merriman                  PA
+84            Merriman                  QZ
+98            Merriman                  QZ
+81            Merriman                  QZ
+81            Merriman                  QZ
+91            Griffith                  FI
+90            Griffith                  HM
+90            Griffith                  HM
+90            Griffith                  HM
+80            Griffith                  HM
+84            Griffith                  MT
+77            Griffith                  PA
+88            Griffith                  QZ
+87            Griffith                  QZ
+88            Griffith                  FI
+88            Griffith                  HM
+82            Griffith                  HM
+75            Griffith                  HM
+85            Griffith                  HM
+98            Griffith                  HM
+88            Griffith                  HM
+88            Griffith                  HM
+88            Griffith                  HM
+78            Griffith                  HM
+78            Griffith                  HM
+83            Griffith                  MT
+92            Moon                      FI
+91            Moon                      HM
+91            Moon                      HM
+81            Moon                      HM
+81            Moon                      HM
+85            Moon                      MT
+88            Moon                      PA
+99            Moon                      QZ
+98            Moon                      QZ
+85            Walston                   FI
+90            Walston                   HM
+99            Walston                   HM
+82            Walston                   HM
+82            Walston                   HM
+90            Walston                   MT
+85            Walston                   PA
+90            Walston                   QZ
+84            Walston                   QZ
+97            Walston                   QZ
+97            Walston                   QZ
+83            King                      FI
+92            King                      HM
+82            King                      HM
+82            King                      HM
+82            King                      HM
+76            King                      MT
+99            King                      PA
+90            King                      QZ
+99            King                      QZ
+76            Harty                     FI
+85            Harty                     HM
+75            Harty                     HM
+75            Harty                     HM
+85            Harty                     HM
+99            Harty                     MT
+92            Harty                     PA
+83            Harty                     QZ
+82            Harty                     QZ
+83            Rothstein                 FI
+92            Rothstein                 MT
+84            Page                      FI
+83            Page                      MT
+77            Kwong                     FI
+76            Kwong                     HM
+76            Kwong                     HM
+86            Kwong                     HM
+96            Kwong                     HM
+90            Kwong                     MT
+83            Kwong                     PA
+84            Kwong                     QZ
+83            Kwong                     QZ
+85            Kwong                     FI
+84            Kwong                     HM
+84            Kwong                     HM
+74            Kwong                     HM
+74            Kwong                     HM
+88            Kwong                     MT
+91            Kwong                     PA
+92            Kwong                     QZ
+91            Kwong                     QZ
+76            Tangaribuan               FI
+85            Tangaribuan               HM
+75            Tangaribuan               HM
+75            Tangaribuan               HM
+85            Tangaribuan               HM
+99            Tangaribuan               MT
+92            Tangaribuan               PA
+83            Tangaribuan               QZ
+82            Tangaribuan               QZ
+77            Thompson                  FI
+76            Thompson                  HM
+76            Thompson                  HM
+86            Thompson                  HM
+96            Thompson                  HM
+90            Thompson                  MT
+83            Thompson                  PA
+84            Thompson                  QZ
+83            Thompson                  QZ
+88            Caro                      FI
+77            Caro                      HM
+87            Caro                      HM
+97            Caro                      HM
+97            Caro                      HM
+91            Caro                      MT
+84            Caro                      PA
+85            Caro                      QZ
+84            Caro                      QZ
+76            Caro                      FI
+91            Caro                      HM
+90            Caro                      HM
+83            Caro                      HM
+73            Caro                      HM
+91            Caro                      MT
+76            Caro                      PA
+91            Caro                      QZ
+75            Caro                      QZ
+98            Caro                      QZ
+98            Caro                      QZ
+77            Benitez                   FI
+76            Benitez                   MT
+92            Benitez                   FI
+91            Benitez                   MT
+77            Porch                     FI
+92            Porch                     HM
+91            Porch                     HM
+74            Porch                     HM
+74            Porch                     HM
+92            Porch                     MT
+77            Porch                     PA
+92            Porch                     QZ
+76            Porch                     QZ
+99            Porch                     QZ
+99            Porch                     QZ
+92            Naso                      FI
+91            Naso                      MT
+83            De Simone                 FI
+92            De Simone                 MT
+88            Ross                      FI
+83            Ross                      HM
+82            Ross                      HM
+75            Ross                      HM
+85            Ross                      HM
+83            Ross                      MT
+88            Ross                      PA
+83            Ross                      QZ
+87            Ross                      QZ
+90            Ross                      QZ
+80            Ross                      QZ
+88            Valamas                   FI
+77            Valamas                   HM
+87            Valamas                   HM
+97            Valamas                   HM
+97            Valamas                   HM
+91            Valamas                   MT
+84            Valamas                   PA
+85            Valamas                   QZ
+84            Valamas                   QZ
+91            Valamas                   FI
+90            Valamas                   HM
+90            Valamas                   HM
+90            Valamas                   HM
+80            Valamas                   HM
+84            Valamas                   MT
+77            Valamas                   PA
+88            Valamas                   QZ
+87            Valamas                   QZ
+99            Liggons                   FI
+88            Liggons                   HM
+98            Liggons                   HM
+98            Liggons                   HM
+98            Liggons                   HM
+92            Liggons                   MT
+85            Liggons                   PA
+76            Liggons                   QZ
+75            Liggons                   QZ
+92            Liggons                   FI
+91            Liggons                   HM
+91            Liggons                   HM
+81            Liggons                   HM
+81            Liggons                   HM
+85            Liggons                   MT
+88            Liggons                   PA
+99            Liggons                   QZ
+98            Liggons                   QZ
+90            La Blank                  FI
+99            La Blank                  HM
+99            La Blank                  HM
+99            La Blank                  HM
+99            La Blank                  HM
+83            La Blank                  MT
+76            La Blank                  PA
+77            La Blank                  QZ
+76            La Blank                  QZ
+83            La Blank                  FI
+92            La Blank                  HM
+82            La Blank                  HM
+82            La Blank                  HM
+82            La Blank                  HM
+76            La Blank                  MT
+99            La Blank                  PA
+90            La Blank                  QZ
+99            La Blank                  QZ
+91            Korka                     FI
+90            Korka                     HM
+90            Korka                     HM
+90            Korka                     HM
+80            Korka                     HM
+84            Korka                     MT
+77            Korka                     PA
+88            Korka                     QZ
+87            Korka                     QZ
+84            Korka                     FI
+83            Korka                     HM
+83            Korka                     HM
+83            Korka                     HM
+73            Korka                     HM
+77            Korka                     MT
+90            Korka                     PA
+91            Korka                     QZ
+90            Korka                     QZ
+92            Engongoro                 FI
+91            Engongoro                 HM
+91            Engongoro                 HM
+81            Engongoro                 HM
+81            Engongoro                 HM
+85            Engongoro                 MT
+88            Engongoro                 PA
+99            Engongoro                 QZ
+98            Engongoro                 QZ
+85            Engongoro                 FI
+84            Engongoro                 HM
+84            Engongoro                 HM
+74            Engongoro                 HM
+74            Engongoro                 HM
+88            Engongoro                 MT
+91            Engongoro                 PA
+92            Engongoro                 QZ
+91            Engongoro                 QZ
+83            Ocampo                    FI
+92            Ocampo                    HM
+82            Ocampo                    HM
+82            Ocampo                    HM
+82            Ocampo                    HM
+76            Ocampo                    MT
+99            Ocampo                    PA
+90            Ocampo                    QZ
+99            Ocampo                    QZ
+76            Ocampo                    FI
+85            Ocampo                    HM
+75            Ocampo                    HM
+75            Ocampo                    HM
+85            Ocampo                    HM
+99            Ocampo                    MT
+92            Ocampo                    PA
+83            Ocampo                    QZ
+82            Ocampo                    QZ
+84            Jaele                     FI
+83            Jaele                     HM
+83            Jaele                     HM
+83            Jaele                     HM
+73            Jaele                     HM
+77            Jaele                     MT
+90            Jaele                     PA
+91            Jaele                     QZ
+90            Jaele                     QZ
+77            Jaele                     FI
+76            Jaele                     HM
+76            Jaele                     HM
+86            Jaele                     HM
+96            Jaele                     HM
+90            Jaele                     MT
+83            Jaele                     PA
+84            Jaele                     QZ
+83            Jaele                     QZ
+85            Perkins                   FI
+84            Perkins                   HM
+84            Perkins                   HM
+74            Perkins                   HM
+74            Perkins                   HM
+88            Perkins                   MT
+91            Perkins                   PA
+92            Perkins                   QZ
+91            Perkins                   QZ
+88            Perkins                   FI
+77            Perkins                   HM
+87            Perkins                   HM
+97            Perkins                   HM
+97            Perkins                   HM
+91            Perkins                   MT
+84            Perkins                   PA
+85            Perkins                   QZ
+84            Perkins                   QZ
+
+(2004 row(s) affected)
+
+
+
+
+8.	List all the zip codes in the ZIPCODE table that are not used in the STUDENT or INSTRUCTOR tables. Use a set operator
+
+SELECT ZIP
+FROM dbo.ZIPCODE
+EXCEPT
+SELECT ZIP
+FROM dbo.STUDENT
+EXCEPT
+SELECT ZIP 
+FROM dbo.INSTRUCTOR
+
+ZIP
+-----
+00914
+06401
+06455
+06520
+06883
+06897
+07002
+07006
+07009
+07014
+07021
+07030
+07034
+07035
+07043
+07054
+07066
+07079
+07087
+07102
+07109
+07410
+07417
+07452
+07458
+07465
+07470
+07480
+07503
+07509
+07601
+07603
+07607
+07620
+07621
+07624
+07628
+07631
+07632
+07640
+07645
+07646
+07648
+07649
+07652
+07656
+10004
+10014
+10017
+10019
+10027
+10036
+10960
+10983
+11029
+11040
+11103
+11210
+11211
+11223
+11231
+11295
+11322
+11361
+11362
+11370
+11374
+11403
+11418
+11550
+11572
+11598
+11694
+11720
+11722
+11776
+11802
+30342
+33431
+
+(79 row(s) affected)
+
+
+9.	Find the students that are not enrolled in any classes. Exclude students with student id less than 300.
+
+SELECT STUDENT.STUDENT_ID, ENROLLMENT.STUDENT_ID
+FROM STUDENT
+RIGHT JOIN ENROLLMENT
+ON STUDENT.STUDENT_ID = ENROLLMENT.STUDENT_ID
+WHERE STUDENT.STUDENT_ID < 300       
+
+STUDENT_ID  STUDENT_ID
+----------- -----------
+102         102
+102         102
+103         103
+104         104
+105         105
+106         106
+106         106
+107         107
+108         108
+109         109
+109         109
+110         110
+110         110
+111         111
+111         111
+112         112
+112         112
+113         113
+113         113
+114         114
+114         114
+117         117
+117         117
+118         118
+119         119
+120         120
+121         121
+122         122
+123         123
+124         124
+124         124
+124         124
+124         124
+127         127
+127         127
+128         128
+129         129
+130         130
+130         130
+133         133
+133         133
+134         134
+135         135
+136         136
+137         137
+138         138
+138         138
+139         139
+140         140
+141         141
+142         142
+143         143
+144         144
+145         145
+146         146
+147         147
+147         147
+148         148
+149         149
+150         150
+151         151
+152         152
+153         153
+154         154
+156         156
+157         157
+158         158
+159         159
+160         160
+161         161
+162         162
+163         163
+164         164
+165         165
+166         166
+167         167
+168         168
+169         169
+170         170
+171         171
+172         172
+173         173
+173         173
+174         174
+175         175
+176         176
+176         176
+178         178
+178         178
+179         179
+180         180
+180         180
+181         181
+182         182
+184         184
+184         184
+184         184
+185         185
+186         186
+187         187
+188         188
+189         189
+189         189
+190         190
+191         191
+192         192
+193         193
+194         194
+195         195
+196         196
+197         197
+198         198
+199         199
+199         199
+200         200
+200         200
+201         201
+202         202
+203         203
+204         204
+205         205
+206         206
+207         207
+208         208
+209         209
+210         210
+211         211
+211         211
+212         212
+214         214
+214         214
+214         214
+214         214
+215         215
+215         215
+215         215
+216         216
+217         217
+218         218
+220         220
+221         221
+223         223
+223         223
+224         224
+225         225
+227         227
+227         227
+228         228
+229         229
+230         230
+232         232
+232         232
+232         232
+233         233
+233         233
+234         234
+235         235
+235         235
+236         236
+236         236
+237         237
+237         237
+238         238
+238         238
+238         238
+240         240
+241         241
+242         242
+243         243
+244         244
+245         245
+246         246
+247         247
+248         248
+248         248
+250         250
+250         250
+250         250
+251         251
+251         251
+252         252
+252         252
+253         253
+254         254
+256         256
+256         256
+257         257
+258         258
+259         259
+259         259
+260         260
+260         260
+261         261
+262         262
+263         263
+264         264
+265         265
+266         266
+267         267
+267         267
+268         268
+269         269
+270         270
+270         270
+271         271
+271         271
+272         272
+273         273
+274         274
+275         275
+276         276
+276         276
+277         277
+277         277
+278         278
+278         278
+279         279
+279         279
+280         280
+280         280
+281         281
+281         281
+282         282
+282         282
+283         283
+283         283
+
+(226 row(s) affected)
+

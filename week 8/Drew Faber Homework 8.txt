@@ -1,0 +1,113 @@
+Drew Faber Week 8 Homework
+
+I wasn't really sure about what the question wants. It says to have Team Number as a parameter but it wants us to print all the teams. I did it both ways.
+
+•Write a Stored Procedure that takes two variables as input, the Team Number and the Date.  It should print a report listing of all teams and players for that Date in Team, Player order
+
+DROP PROCEDURE DateTeam
+GO
+
+CREATE PROCEDURE DateTeam @teamNum INT , @dateNum DATE OUTPUT AS
+SELECT T.Team_Number, T.Team_Name, P.Player_Number, P.Player_First_Name, P.Player_Last_Name, S.Scores_Date_Bowled
+FROM dbo.TEAMS T, dbo.Players P, dbo.Scores S
+WHERE 
+@dateNum = S.Scores_Date_Bowled AND
+@teamNum = T.Team_Number AND
+P.Player_Number = S.Scores_Player_Number AND
+P.Player_Team_Number = T.Team_Number AND
+T.Team_Number = S.Scores_Team_Number;
+
+EXEC DateTeam @teamNum = 12, @dateNum = '1/17/15'
+
+Team_Number Team_Name                                          Player_Number                                      Player_First_Name                                  Player_Last_Name                                   Scores_Date_Bowled
+----------- -------------------------------------------------- -------------------------------------------------- -------------------------------------------------- -------------------------------------------------- ------------------
+12          Little Giants                                      1                                                  Pac                                                Man                                                2015-01-17
+12          Little Giants                                      2                                                  Richard                                            Feynman                                            2015-01-17
+12          Little Giants                                      3                                                  Niels                                              Bohr                                               2015-01-17
+12          Little Giants                                      4                                                  Isaac                                              Newton                                             2015-01-17
+12          Little Giants                                      5                                                  Alan                                               Turing                                             2015-01-17
+
+(5 row(s) affected)
+
+
+CREATE PROCEDURE TeamsDate @dateNum DATE OUTPUT AS
+SELECT T.Team_Number, T.Team_Name, P.Player_Number, P.Player_First_Name, P.Player_Last_Name, S.Scores_Date_Bowled
+FROM dbo.TEAMS T, dbo.Players P, dbo.Scores S
+WHERE 
+@dateNum = S.Scores_Date_Bowled AND
+P.Player_Number = S.Scores_Player_Number AND
+P.Player_Team_Number = T.Team_Number AND
+T.Team_Number = S.Scores_Team_Number;
+
+EXEC TeamsDate @dateNum = '1/10/15'
+
+Team_Number Team_Name                                          Player_Number                                      Player_First_Name                                  Player_Last_Name                                   Scores_Date_Bowled
+----------- -------------------------------------------------- -------------------------------------------------- -------------------------------------------------- -------------------------------------------------- ------------------
+1           NARJ                                                01                                                Namra                                              Rajput                                             2015-01-10
+1           NARJ                                               02                                                 Emma                                               William                                            2015-01-10
+1           NARJ                                               03                                                 Olivia                                             Mason                                              2015-01-10
+1           NARJ                                               04                                                 Ava                                                Johnson                                            2015-01-10
+1           NARJ                                               05                                                 Elsa                                               Clone                                              2015-01-10
+2           Pin Pals                                           1                                                  Steve                                              Karataglidis                                       2015-01-10
+2           Pin Pals                                           2                                                  Homer                                              Simpson                                            2015-01-10
+2           Pin Pals                                           3                                                  Moe                                                Szyslak                                            2015-01-10
+2           Pin Pals                                           4                                                  Apu                                                Nahasapeemapetilon                                 2015-01-10
+2           Pin Pals                                           5                                                  Otto                                               Mann                                               2015-01-10
+3           HOT SHOTS                                          1                                                  Sergio                                             Arreola                                            2015-01-10
+3           HOT SHOTS                                          2                                                  Brittany                                           Thompson                                           2015-01-10
+3           HOT SHOTS                                          3                                                  Katie                                              Petkovich                                          2015-01-10
+3           HOT SHOTS                                          4                                                  Taylor                                             Mitchell                                           2015-01-10
+3           HOT SHOTS                                          5                                                  Cam                                                Brady                                              2015-01-10
+4           Castaways                                          1                                                  Joshua                                             Moore                                              2015-01-10
+4           Castaways                                          2                                                  Oscar                                              Torres                                             2015-01-10
+4           Castaways                                          3                                                  Saul                                               Velazco                                            2015-01-10
+4           Castaways                                          4                                                  Julio                                              Lira                                               2015-01-10
+4           Castaways                                          5                                                  Brian                                              Valdez                                             2015-01-10
+5           Snakes on a Lane                                   1                                                  Emily                                              Kranias                                            2015-01-10
+5           Snakes on a Lane                                   2                                                  Mitch                                              Berg                                               2015-01-10
+5           Snakes on a Lane                                   3                                                  Alec                                               Garcia                                             2015-01-10
+5           Snakes on a Lane                                   4                                                  Brandi                                             Biser                                              2015-01-10
+5           Snakes on a Lane                                   5                                                  Eric                                               Papesh                                             2015-01-10
+8           Ballers                                            1                                                  Mike                                               Dew                                                2015-01-10
+8           Ballers                                            2                                                  Petter                                             Clarkson                                           2015-01-10
+8           Ballers                                            3                                                  Sandra                                             Vucic                                              2015-01-10
+8           Ballers                                            4                                                  Svetlana                                           Norris                                             2015-01-10
+8           Ballers                                            5                                                  Boban                                              Krsteski                                           2015-01-10
+9           MoneyPin$                                          1                                                  Emily                                              Chen                                               2015-01-10
+9           MoneyPin$                                          2                                                  Mrs.                                               Carter                                             2015-01-10
+9           MoneyPin$                                          3                                                  Chris                                              Pratt                                              2015-01-10
+9           MoneyPin$                                          4                                                  Jimmy                                              Fallon                                             2015-01-10
+9           MoneyPin$                                          5                                                  Jennifer                                           Lawrence                                           2015-01-10
+10          HUNTER                                             1                                                  MOHAMMED                                           SAYYAD                                             2015-01-10
+10          HUNTER                                             2                                                  MIKE                                               ALI                                                2015-01-10
+10          HUNTER                                             3                                                  KATE                                               CARON                                              2015-01-10
+10          HUNTER                                             4                                                  ANN                                                YALE                                               2015-01-10
+10          HUNTER                                             5                                                  KHALID                                             MUSA                                               2015-01-10
+11          Gutter Dogs                                        1                                                  Rebecca                                            Bogusz                                             2015-01-10
+11          Gutter Dogs                                        2                                                  Jenny                                              Finnegan                                           2015-01-10
+11          Gutter Dogs                                        3                                                  Terry                                              Cave                                               2015-01-10
+11          Gutter Dogs                                        4                                                  John                                               Laney                                              2015-01-10
+11          Gutter Dogs                                        5                                                  Shannon                                            Long                                               2015-01-10
+12          Little Giants                                      1                                                  Pac                                                Man                                                2015-01-10
+12          Little Giants                                      2                                                  Richard                                            Feynman                                            2015-01-10
+12          Little Giants                                      3                                                  Niels                                              Bohr                                               2015-01-10
+12          Little Giants                                      4                                                  Isaac                                              Newton                                             2015-01-10
+12          Little Giants                                      5                                                  Alan                                               Turing                                             2015-01-10
+13          wolves                                             1                                                  Milos                                              Paravinja                                          2015-01-10
+13          wolves                                             2                                                  Amanda                                             Garton                                             2015-01-10
+13          wolves                                             3                                                  Kenny                                              Smith                                              2015-01-10
+13          wolves                                             4                                                  John                                               Anderson                                           2015-01-10
+13          wolves                                             5                                                  Dwayne                                             Wade                                               2015-01-10
+14          The Greats                                         1                                                  Nikola                                             Tesla                                              2015-01-10
+14          The Greats                                         2                                                  Edgar                                              Poe                                                2015-01-10
+14          The Greats                                         3                                                  Galileo                                            Galilei                                            2015-01-10
+14          The Greats                                         4                                                  Betty                                              Friedan                                            2015-01-10
+14          The Greats                                         5                                                  Cheryl                                             Wilson Griffin                                     2015-01-10
+17          Cute Bowl Bois                                     1                                                  James                                              Pierzchalski                                       2015-01-10
+17          Cute Bowl Bois                                     2                                                  Bruce                                              Wayne                                              2015-01-10
+17          Cute Bowl Bois                                     3                                                  Clark                                              Kent                                               2015-01-10
+17          Cute Bowl Bois                                     4                                                  Lex                                                Luthor                                             2015-01-10
+17          Cute Bowl Bois                                     5                                                  Barry                                              Allen                                              2015-01-10
+
+(65 row(s) affected)
+

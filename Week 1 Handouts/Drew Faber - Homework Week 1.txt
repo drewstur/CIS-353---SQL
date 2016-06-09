@@ -1,0 +1,230 @@
+Drew Faber
+Homework week 1
+
+--1.	List all employee information in department 30.
+SELECT *
+FROM dbo.EMP
+WHERE deptno = 30 
+
+EMPNO       ENAME      JOB       MGR         HIREDATE   SAL                                     COMM                                    DEPTNO
+----------- ---------- --------- ----------- ---------- --------------------------------------- --------------------------------------- -----------
+7499        ALLEN      SALESMAN  7698        1981-02-20 1600.00                                 300.00                                  30
+7521        WARD       SALESMAN  7698        1981-02-22 1250.00                                 500.00                                  30
+7654        MARTIN     SALESMAN  7698        1981-09-28 1250.00                                 1400.00                                 30
+7698        BLAKE      MANAGER   7839        1981-05-01 2850.00                                 NULL                                    30
+7844        TURNER     SALESMAN  7698        1981-09-08 1500.00                                 0.00                                    30
+7900        JAMES      CLERK     7698        1981-12-03 950.00                                  NULL                                    30
+
+(6 row(s) affected)
+
+
+--2.	List employees name, job, and salary that is a manager and has a salary > $1,000
+SELECT *
+FROM dbo.EMP
+WHERE sal > 1000
+
+EMPNO       ENAME      JOB       MGR         HIREDATE   SAL                                     COMM                                    DEPTNO
+----------- ---------- --------- ----------- ---------- --------------------------------------- --------------------------------------- -----------
+7499        ALLEN      SALESMAN  7698        1981-02-20 1600.00                                 300.00                                  30
+7521        WARD       SALESMAN  7698        1981-02-22 1250.00                                 500.00                                  30
+7566        JONES      MANAGER   7839        1981-04-02 2975.00                                 NULL                                    20
+7654        MARTIN     SALESMAN  7698        1981-09-28 1250.00                                 1400.00                                 30
+7698        BLAKE      MANAGER   7839        1981-05-01 2850.00                                 NULL                                    30
+7782        CLARK      MANAGER   7839        1981-06-09 2450.00                                 NULL                                    10
+7788        SCOTT      ANALYST   7566        1982-12-09 3000.00                                 NULL                                    20
+7839        KING       PRESIDENT NULL        1981-11-17 5000.00                                 NULL                                    10
+7844        TURNER     SALESMAN  7698        1981-09-08 1500.00                                 0.00                                    30
+7876        ADAMS      CLERK     7788        1983-01-12 1100.00                                 NULL                                    20
+7902        FORD       ANALYST   7566        1981-12-03 3000.00                                 NULL                                    20
+7934        MILLER     CLERK     7782        1982-01-23 1300.00                                 NULL                                    10
+
+(12 row(s) affected)
+
+
+--3.	Repeat exercise 2 for any employee that is not a manager or earns a salary > $1,000
+SELECT *
+FROM dbo.EMP
+WHERE JOB <> 'MANAGER' OR SAL > 1000
+
+EMPNO       ENAME      JOB       MGR         HIREDATE   SAL                                     COMM                                    DEPTNO
+----------- ---------- --------- ----------- ---------- --------------------------------------- --------------------------------------- -----------
+7369        SMITH      CLERK     7902        1980-12-17 800.00                                  NULL                                    20
+7499        ALLEN      SALESMAN  7698        1981-02-20 1600.00                                 300.00                                  30
+7521        WARD       SALESMAN  7698        1981-02-22 1250.00                                 500.00                                  30
+7566        JONES      MANAGER   7839        1981-04-02 2975.00                                 NULL                                    20
+7654        MARTIN     SALESMAN  7698        1981-09-28 1250.00                                 1400.00                                 30
+7698        BLAKE      MANAGER   7839        1981-05-01 2850.00                                 NULL                                    30
+7782        CLARK      MANAGER   7839        1981-06-09 2450.00                                 NULL                                    10
+7788        SCOTT      ANALYST   7566        1982-12-09 3000.00                                 NULL                                    20
+7839        KING       PRESIDENT NULL        1981-11-17 5000.00                                 NULL                                    10
+7844        TURNER     SALESMAN  7698        1981-09-08 1500.00                                 0.00                                    30
+7876        ADAMS      CLERK     7788        1983-01-12 1100.00                                 NULL                                    20
+7900        JAMES      CLERK     7698        1981-12-03 950.00                                  NULL                                    30
+7902        FORD       ANALYST   7566        1981-12-03 3000.00                                 NULL                                    20
+7934        MILLER     CLERK     7782        1982-01-23 1300.00                                 NULL                                    10
+
+(14 row(s) affected)
+
+
+
+--4.	Show all employee names and salary that earn between $1,000 and $2,000.  Use the between operator.
+SELECT * 
+FROM dbo.EMP
+WHERE SAL BETWEEN 1000 AND 2000
+
+EMPNO       ENAME      JOB       MGR         HIREDATE   SAL                                     COMM                                    DEPTNO
+----------- ---------- --------- ----------- ---------- --------------------------------------- --------------------------------------- -----------
+7499        ALLEN      SALESMAN  7698        1981-02-20 1600.00                                 300.00                                  30
+7521        WARD       SALESMAN  7698        1981-02-22 1250.00                                 500.00                                  30
+7654        MARTIN     SALESMAN  7698        1981-09-28 1250.00                                 1400.00                                 30
+7844        TURNER     SALESMAN  7698        1981-09-08 1500.00                                 0.00                                    30
+7876        ADAMS      CLERK     7788        1983-01-12 1100.00                                 NULL                                    20
+7934        MILLER     CLERK     7782        1982-01-23 1300.00                                 NULL                                    10
+
+(6 row(s) affected)
+
+
+--5.	Select all employees that are in department 10 and 30.  Use the IN operator.
+SELECT *
+FROM dbo.EMP
+WHERE DEPTNO IN (10, 30)
+
+EMPNO       ENAME      JOB       MGR         HIREDATE   SAL                                     COMM                                    DEPTNO
+----------- ---------- --------- ----------- ---------- --------------------------------------- --------------------------------------- -----------
+7499        ALLEN      SALESMAN  7698        1981-02-20 1600.00                                 300.00                                  30
+7521        WARD       SALESMAN  7698        1981-02-22 1250.00                                 500.00                                  30
+7654        MARTIN     SALESMAN  7698        1981-09-28 1250.00                                 1400.00                                 30
+7698        BLAKE      MANAGER   7839        1981-05-01 2850.00                                 NULL                                    30
+7782        CLARK      MANAGER   7839        1981-06-09 2450.00                                 NULL                                    10
+7839        KING       PRESIDENT NULL        1981-11-17 5000.00                                 NULL                                    10
+7844        TURNER     SALESMAN  7698        1981-09-08 1500.00                                 0.00                                    30
+7900        JAMES      CLERK     7698        1981-12-03 950.00                                  NULL                                    30
+7934        MILLER     CLERK     7782        1982-01-23 1300.00                                 NULL                                    10
+
+(9 row(s) affected)
+
+
+--6.	Select all employee names with an “A” in the first position of the employee name.  Use the substring function (we did not discuss this, search for it) or a wild card.
+SELECT *
+FROM dbo.EMP
+WHERE ENAME LIKE 'A%'
+
+
+EMPNO       ENAME      JOB       MGR         HIREDATE   SAL                                     COMM                                    DEPTNO
+----------- ---------- --------- ----------- ---------- --------------------------------------- --------------------------------------- -----------
+7499        ALLEN      SALESMAN  7698        1981-02-20 1600.00                                 300.00                                  30
+7876        ADAMS      CLERK     7788        1983-01-12 1100.00                                 NULL                                    20
+
+(2 row(s) affected)
+
+
+
+--7.	Select all employees with an “A” as the second character of their name.  Use a wildcard. 
+SELECT *
+FROM dbo.EMP
+WHERE ENAME LIKE '_a%'
+
+EMPNO       ENAME      JOB       MGR         HIREDATE   SAL                                     COMM                                    DEPTNO
+----------- ---------- --------- ----------- ---------- --------------------------------------- --------------------------------------- -----------
+7521        WARD       SALESMAN  7698        1981-02-22 1250.00                                 500.00                                  30
+7654        MARTIN     SALESMAN  7698        1981-09-28 1250.00                                 1400.00                                 30
+7900        JAMES      CLERK     7698        1981-12-03 950.00                                  NULL                                    30
+
+
+--8.	List the employee names in alphabetical sequence.	
+SELECT ENAME
+FROM dbo.EMP
+ORDER BY ENAME;
+
+ENAME
+----------
+ADAMS
+ALLEN
+BLAKE
+CLARK
+FORD
+JAMES
+JONES
+KING
+MARTIN
+MILLER
+SCOTT
+SMITH
+TURNER
+WARD
+
+
+--9.	List the job, salary, and employee name in job order and then salary in descending order. 
+SELECT JOB, SAL, ENAME
+FROM dbo.EMP
+ORDER BY JOB, SAL DESC;
+
+JOB       SAL                                     ENAME
+--------- --------------------------------------- ----------
+ANALYST   3000.00                                 SCOTT
+ANALYST   3000.00                                 FORD
+CLERK     1300.00                                 MILLER
+CLERK     1100.00                                 ADAMS
+CLERK     950.00                                  JAMES
+CLERK     800.00                                  SMITH
+MANAGER   2975.00                                 JONES
+MANAGER   2850.00                                 BLAKE
+MANAGER   2450.00                                 CLARK
+PRESIDENT 5000.00                                 KING
+SALESMAN  1600.00                                 ALLEN
+SALESMAN  1500.00                                 TURNER
+SALESMAN  1250.00                                 WARD
+SALESMAN  1250.00                                 MARTIN
+
+
+--10.	Show a list of different jobs.  Eliminate repeating values.
+SELECT DISTINCT JOB
+FROM dbo.EMP
+
+JOB
+---------
+ANALYST
+CLERK
+MANAGER
+PRESIDENT
+SALESMAN
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,45 @@
+Week 10 homework - Drew Faber
+
+1. Create a function that you input the date, team, and player number and get back the 3 scores, total, and  average for that week for that player and create a select statement to show the use of it, make sure the select statement identifies the team number, team name, player number, player name, the date, and the 5 numbers returned to you by the function
+
+IF OBJECT_ID (N'PlayerData', N'IF') IS NOT NULL
+    DROP FUNCTION PlayerData;
+GO
+CREATE FUNCTION PlayerData (@date DATE, @team INT, @player INT)
+RETURNS TABLE
+AS 
+RETURN
+SELECT T.Team_Number, T.Team_Name,  S.Scores_Player_Number, P.Player_First_Name, P.Player_Last_Name, @date as WeekDate, S.Scores_Game1, S.Scores_Game2, S.Scores_Game3, (S.Scores_Game1 + S.Scores_Game2 + S.Scores_Game3) as ScoreTotal, (S.Scores_Game1 + S.Scores_Game2 + S.Scores_Game3)/3 as ScoreAverage
+FROM Scores S, Teams T, Players P
+WHERE S.Scores_Date_Bowled = @date and S.Scores_Player_Number = @player and S.Scores_Team_Number = @team and S.Scores_Date_Bowled = @date and S.Scores_Team_Number = T.Team_Number and P.Player_Team_Number = T.Team_Number and P.Player_Number = S.Scores_Player_Number
+
+SELECT * from dbo.PlayerData('2015-01-10',12,1)
+
+Team_Number Team_Name                                          Scores_Player_Number Player_First_Name                                  Player_Last_Name                                   WeekDate   Scores_Game1 Scores_Game2 Scores_Game3 ScoreTotal  ScoreAverage
+----------- -------------------------------------------------- -------------------- -------------------------------------------------- -------------------------------------------------- ---------- ------------ ------------ ------------ ----------- ------------
+12          Little Giants                                      1                    Pac                                                Man                                                2015-01-10 171          189          165          525         175
+
+(1 row(s) affected)
+
+
+2. Create a function that you input the date, and team and get back the 3 scores and the total for that team for the week and create a select statement to show the use of it, make sure the select statement identifies the team number, team name,  the date and  the 4 numbers returned to you by the function
+
+IF OBJECT_ID (N'TeamData', N'IF') IS NOT NULL
+    DROP FUNCTION TeamData;
+GO
+CREATE FUNCTION TeamData (@date DATE, @team INT)
+RETURNS TABLE
+AS 
+RETURN
+SELECT T.Team_Number, T.Team_Name, @date as WeekDate, SUM(S.Scores_Game1) AS GameOneTotal, SUM(S.Scores_Game2) AS GameTwoTotal, SUM(S.Scores_Game3) AS GameThreeTotal, SUM(S.Scores_Game1 + S.Scores_Game2 + S.Scores_Game3) AS TotalTeamScores
+FROM Scores S, Teams T
+WHERE S.Scores_Team_Number = @team and S.Scores_Date_Bowled = @date and S.Scores_Team_Number = T.Team_Number
+GROUP BY T.Team_Number, T.Team_Name, S.Scores_Date_Bowled
+
+SELECT * from dbo.TeamData('2015-01-10', 12)
+
+Team_Number Team_Name                                          WeekDate   GameOneTotal GameTwoTotal GameThreeTotal TotalTeamScores
+----------- -------------------------------------------------- ---------- ------------ ------------ -------------- ---------------
+12          Little Giants                                      2015-01-10 829          825          847            2501
+
+(1 row(s) affected)

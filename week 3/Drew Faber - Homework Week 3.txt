@@ -1,0 +1,171 @@
+Drew Faber
+Homework week 3
+
+--1. How many employees are working at each job in each department and
+--   what are the sums and averages are for the salary of those employees? 
+
+SELECT DEPTNO, JOB, count(*) AS "NUMBER OF EMPLOYEE", SUM(SAL) AS "TOTAL SALARY", AVG(SAL) AS "AVG. SALARY"
+FROM dbo.EMP
+GROUP BY DEPTNO, JOB
+ORDER BY DEPTNO, JOB
+
+DEPTNO      JOB       NUMBER OF EMPLOYEE TOTAL SALARY                            AVG. SALARY
+----------- --------- ------------------ --------------------------------------- ---------------------------------------
+10          CLERK     1                  1300.00                                 1300.000000
+10          MANAGER   1                  2450.00                                 2450.000000
+10          PRESIDENT 1                  5000.00                                 5000.000000
+20          ANALYST   2                  6000.00                                 3000.000000
+20          CLERK     2                  1900.00                                 950.000000
+20          MANAGER   1                  2975.00                                 2975.000000
+30          CLERK     1                  950.00                                  950.000000
+30          MANAGER   1                  2850.00                                 2850.000000
+30          SALESMAN  4                  5600.00                                 1400.000000
+50          CAPTAIN   1                  6000.00                                 6000.000000
+
+(10 row(s) affected)
+
+
+--2.	Show the employee name with the maximum salary.
+
+SELECT ENAME, SAL
+FROM dbo.EMP
+WHERE SAL = (SELECT MAX(SAL) FROM dbo.EMP);
+
+ENAME      SAL
+---------- ---------------------------------------
+KIRK       6000.00
+
+(1 row(s) affected)
+
+
+--3.	Show the average salary for all employees that are not managers. 
+
+SELECT AVG(SAL) AS "AVG SALARY - NON MANAGER" 
+FROM dbo.EMP
+WHERE JOB <> 'MANAGER'
+
+AVG SALARY - NON MANAGER
+---------------------------------------
+2229.166666
+
+(1 row(s) affected)
+
+
+--4.	What is the difference between the highest and lowest salary? 
+
+SELECT MAX(SAL)- MIN(SAL) AS "DIFFERENCE OF HIGHEST AND LOWEST SALARY"
+FROM dbo.EMP
+
+DIFFERENCE OF HIGHEST AND LOWEST SALARY
+---------------------------------------
+5200.00
+
+(1 row(s) affected)
+
+
+--5.	Show the state and the number of zip codes by state.  Order the result by number of zip codes in descending sequence.  Use the ZIPCODES table. 
+
+SELECT STATE, COUNT(ZIP) AS ZIPCODES
+FROM dbo.ZIPCODE GROUP BY STATE
+ORDER BY ZIPCODES DESC
+
+STATE ZIPCODES
+----- -----------
+NY    123
+NJ    74
+CT    19
+MA    5
+MI    1
+FL    1
+GA    1
+OH    1
+PR    1
+WV    1
+
+(10 row(s) affected)
+
+
+--6.	Which city has the most zip codes assigned to it?
+
+SELECT TOP 1 CITY, COUNT(ZIP) AS ZIPCODES
+FROM dbo.ZIPCODE 
+GROUP BY CITY
+ORDER BY ZIPCODES DESC
+
+CITY                      ZIPCODES
+------------------------- -----------
+Brooklyn                  36
+
+(1 row(s) affected)
+
+
+--7.	Show the state and the number of zip codes by state.  Order the result by number of zip codes in descending sequence and exclude all states having less than 5 zip codes. 
+
+SELECT STATE, COUNT(ZIP) AS ZIPCODES
+FROM dbo.ZIPCODE 
+GROUP BY STATE
+HAVING COUNT(ZIP) > 4
+ORDER BY ZIPCODES DESC
+
+STATE ZIPCODES
+----- -----------
+NY    123
+NJ    74
+CT    19
+MA    5
+
+(4 row(s) affected)
+
+
+--8.	Show the Student_ID, last name, and the number of enrollments for the student.  Show only students with more than 2 enrollments. 
+
+--9.	Show the number of students enrolled for each city and zip code for New York and where the city begins with ‘W’.  
+
+SELECT COUNT(STUDENT_ID) AS NUMSTUDENTS, ZIP
+FROM student WHERE ZIP 
+IN
+(
+SELECT ZIP FROM ZIPCODE 
+WHERE CITY = 'New York' OR CITY LIKE 'W%'
+)
+GROUP BY ZIP;
+
+
+NUMSTUDENTS ZIP
+----------- -----
+1           02189
+1           06798
+2           06880
+1           07057
+1           07090
+3           10025
+1           10048
+2           11357
+4           11377
+1           11552
+
+(10 row(s) affected)
+
+
+--10.	Display the course number and description of courses with no enrollment. Also include courses which have no section assigned.  (Might not be possible before next weeks lecture)
+
+SELECT COURSE_NO, DESCRIPTION FROM COURSE
+WHERE COURSE_NO 
+NOT IN
+(
+SELECT COURSE_NO FROM SECTION
+WHERE SECTION_ID 
+IN 
+(
+SELECT SECTION_ID FROM ENROLLMENT
+));
+
+COURSE_NO   DESCRIPTION
+----------- --------------------------------------------------
+80          Structured Programming Techniques
+144         Database Design
+210         Oracle Tools
+220         PL/SQL Programming
+430         JDeveloper Techniques
+
+(5 row(s) affected)

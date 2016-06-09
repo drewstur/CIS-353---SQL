@@ -1,0 +1,191 @@
+Drew Faber Homework 12
+
+--DREW FABER WEEK 12 HOMEWORK PART 1
+DECLARE @AccountID INT
+DECLARE @eName VARCHAR(10)
+DECLARE @getEName CURSOR
+DECLARE @getAccountID CURSOR
+
+SET @getEName = CURSOR FOR
+SELECT eName
+FROM EMP
+
+SET @getAccountID = CURSOR FOR
+SELECT EMPNO
+FROM EMP
+
+OPEN @getEName
+OPEN @getAccountID
+
+FETCH NEXT
+FROM @getEName INTO @eName
+FETCH NEXT
+FROM @getAccountID INTO @AccountID
+
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+if @AccountID % 2 =0
+PRINT  '     '+cast(@AccountID as char(6)) +cast(@eName as varchar(10))
+
+if @AccountID % 2 <> 0
+PRINT cast( @AccountID as char(6))+'     '+cast(@eName as varchar(10))
+FETCH NEXT
+FROM @getAccountID INTO @AccountID
+FETCH NEXT
+FROM @getEName INTO @eName
+END
+
+CLOSE @getEName
+CLOSE @getAccountID
+DEALLOCATE @getEName
+DEALLOCATE @getAccountID
+
+PART1 
+7369       SMITH
+7499       ALLEN
+7521       WARD
+     7566  JONES
+     7654  MARTIN
+     7698  BLAKE
+     7782  CLARK
+     7788  SCOTT
+7839       KING
+     7844  TURNER
+     7876  ADAMS
+     7900  JAMES
+     7902  FORD
+     7934  MILLER
+9999       KIRK
+
+
+PART 2-------------
+--HOMEWORK 12 PART 2
+declare @tnum int
+declare @tname VARCHAR(10)
+declare @fname VARCHAR(10)
+declare @lname VARCHAR(10)
+declare @pnum INT
+declare @ptnum int
+declare @temp_team varchar(10)
+declare @displaydata varchar(100)
+declare @getdisplaydata cursor
+
+set @getdisplaydata = cursor for
+select t.Team_Number, t.Team_Name, p.Player_First_Name, p.Player_Last_Name, p.Player_Number, p.Player_Team_Number
+from teams t, players p
+where t.Team_Number = p.Player_Team_Number
+
+open @getdisplaydata
+
+FETCH NEXT
+FROM @getdisplaydata INTO @tnum, @tname, @fname, @lname, @pnum, @ptnum
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+IF @tnum <> @temp_team
+PRINT ' '
+PRINT  cast(@tnum as char(10))+cast(@tname as char(20))+cast(@pnum as char(10))+cast(@fname as char(20))+cast(@lname as char(20))
+SELECT @temp_team = @tnum
+FETCH NEXT
+FROM @getdisplaydata INTO @tnum, @tname, @fname, @lname, @pnum, @ptnum
+END
+
+CLOSE @getdisplaydata
+DEALLOCATE @getdisplaydata
+
+1         NARJ                1         Namra               Rajput              
+1         NARJ                2         Emma                William             
+1         NARJ                3         Olivia              Mason               
+1         NARJ                4         Ava                 Johnson             
+1         NARJ                5         Elsa                Clone               
+ 
+2         Pin Pals            1         Steve               Karataglid          
+2         Pin Pals            2         Homer               Simpson             
+2         Pin Pals            3         Moe                 Szyslak             
+2         Pin Pals            4         Apu                 Nahasapeem          
+2         Pin Pals            5         Otto                Mann                
+ 
+3         HOT SHOTS           1         Sergio              Arreola             
+3         HOT SHOTS           2         Brittany            Thompson            
+3         HOT SHOTS           3         Katie               Petkovich           
+3         HOT SHOTS           4         Taylor              Mitchell            
+3         HOT SHOTS           5         Cam                 Brady               
+ 
+4         Castaways           1         Joshua              Moore               
+4         Castaways           2         Oscar               Torres              
+4         Castaways           3         Saul                Velazco             
+4         Castaways           4         Julio               Lira                
+4         Castaways           5         Brian               Valdez              
+ 
+5         Snakes on           1         Emily               Kranias             
+5         Snakes on           2         Mitch               Berg                
+5         Snakes on           3         Alec                Garcia              
+5         Snakes on           4         Brandi              Biser               
+5         Snakes on           5         Eric                Papesh              
+ 
+6         The Big Le          1         Robert              Recknagel           
+6         The Big Le          2         Jeff                Lebowski            
+6         The Big Le          3         Walt                Sobchak             
+6         The Big Le          4         Donny               Kerabatsos          
+6         The Big Le          5         Maude               Lebowski            
+ 
+7         EBOWLA              1         STEVE               WAGNER              
+7         EBOWLA              2         KYLE                WAGNER              
+7         EBOWLA              3         AUTUMN              SNOW                
+7         EBOWLA              4         BOB                 SNOW                
+7         EBOWLA              5         MARC                SANDONATO           
+ 
+8         Ballers             1         Mike                Dew                 
+8         Ballers             2         Petter              Clarkson            
+8         Ballers             3         Sandra              Vucic               
+8         Ballers             4         Svetlana            Norris              
+8         Ballers             5         Boban               Krsteski            
+ 
+9         MoneyPin$           1         Emily               Chen                
+9         MoneyPin$           2         Mrs.                Carter              
+9         MoneyPin$           3         Chris               Pratt               
+9         MoneyPin$           4         Jimmy               Fallon              
+9         MoneyPin$           5         Jennifer            Lawrence            
+ 
+10        HUNTER              1         MOHAMMED            SAYYAD              
+10        HUNTER              2         MIKE                ALI                 
+10        HUNTER              3         KATE                CARON               
+10        HUNTER              4         ANN                 YALE                
+10        HUNTER              5         KHALID              MUSA                
+ 
+11        Gutter Dog          1         Rebecca             Bogusz              
+11        Gutter Dog          2         Jenny               Finnegan            
+11        Gutter Dog          3         Terry               Cave                
+11        Gutter Dog          4         John                Laney               
+11        Gutter Dog          5         Shannon             Long                
+ 
+12        Little Gia          1         Pac                 Man                 
+12        Little Gia          2         Richard             Feynman             
+12        Little Gia          3         Niels               Bohr                
+12        Little Gia          4         Isaac               Newton              
+12        Little Gia          5         Alan                Turing              
+ 
+13        wolves              1         Milos               Paravinja           
+13        wolves              2         Amanda              Garton              
+13        wolves              3         Kenny               Smith               
+13        wolves              4         John                Anderson            
+13        wolves              5         Dwayne              Wade                
+ 
+14        The Greats          1         Nikola              Tesla               
+14        The Greats          2         Edgar               Poe                 
+14        The Greats          3         Galileo             Galilei             
+14        The Greats          4         Betty               Friedan             
+14        The Greats          5         Cheryl              Wilson Gri          
+ 
+15        Pale Blue           1         Scott               Puplava             
+15        Pale Blue           2         Jason               Alexander           
+15        Pale Blue           3         Carl                Sagan               
+15        Pale Blue           4         Alice               Cooper              
+15        Pale Blue           5         Bill                OReilly             
+ 
+17        Cute Bowl           1         James               Pierzchals          
+17        Cute Bowl           2         Bruce               Wayne               
+17        Cute Bowl           3         Clark               Kent                
+17        Cute Bowl           4         Lex                 Luthor              
+17        Cute Bowl           5         Barry               Allen              
